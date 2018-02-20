@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <developers>
+        <developer>
+            <email>azat.akhunov@rtlabs.ru</email>
+            <name>Azat Akhunov</name>
+            <organization>RTLabs</organization>
+            <url>https://rtlabs.ru</url>
+        </developer>
+    </developers>
+
+    <groupId>ru.leon4uk.coins.app</groupId>
+    <artifactId>app</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>coins-main-application</name>
+    <description>Приложение для работы с монетами</description>
+
+    <modules>
+        <module>coins-web</module>
+        <module>coins-main</module>
+        <module>coins-bot</module>
+        <module>coins-web</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <guice.version>4.1.0</guice.version>
+        <rs-api.version>2.1</rs-api.version>
+        <commons-dbcp.version>1.4</commons-dbcp.version>
+        <spring-jdbc.version>4.3.10.RELEASE</spring-jdbc.version>
+        <spring.version>4.0.2.RELEASE</spring.version>
+        <postgresql.version>9.1-901.jdbc4</postgresql.version>
+        <spring-context.version>4.2.3.RELEASE</spring-context.version>
+        <gagawa.version>1.0.1</gagawa.version>
+        <json.version>20160810</json.version>
+        <junit.version>4.12</junit.version>
+        <javax.version>3.1.0</javax.version>
+        <spring.version>4.0.2.RELEASE</spring.version>
+        <spring-jdbc.version>4.3.10.RELEASE</spring-jdbc.version>
+        <postgresql.version>9.1-901.jdbc4</postgresql.version>
+        <commons-dbcp.version>1.4</commons-dbcp.version>
+        <spring-jdbc.version>4.3.10.RELEASE</spring-jdbc.version>
+        <telegram.version>3.4</telegram.version>
+        <apidaemon.version>1.0-SNAPSHOT</apidaemon.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>${commons-dbcp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring-jdbc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version>
+        </dependency>
+
+
+    </dependencies>
+
+</project>
