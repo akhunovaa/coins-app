@@ -1,4 +1,4 @@
-package ru.leon4uk.coins.app.initializer;
+package ru.leon4uk.coins.app.web.initializer;
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -12,7 +12,7 @@ import javax.servlet.ServletRegistration;
 
 public class AppInitializer implements WebApplicationInitializer {
 
-    private static final String CONFIG_LOCATION = "ru.leon4uk.coins.web.config";
+    private static final String CONFIG_LOCATION = "ru.leon4uk.coins.app.web.config";
     private static final String MAPPING_URL = "/";
 
     @Override
