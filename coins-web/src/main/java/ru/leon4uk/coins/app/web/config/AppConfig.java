@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
+import ru.leon4uk.app.bot.BotApplication;
 
 import javax.annotation.Resource;
 
@@ -37,5 +38,10 @@ public class AppConfig {
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(
                 dataSource());
+    }
+
+    @Bean
+    public BotApplication botApplication() {
+        return new BotApplication();
     }
 }
