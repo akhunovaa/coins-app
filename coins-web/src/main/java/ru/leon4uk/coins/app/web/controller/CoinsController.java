@@ -30,6 +30,11 @@ class CoinsController {
         return "redirect:/index";
     }
 
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
