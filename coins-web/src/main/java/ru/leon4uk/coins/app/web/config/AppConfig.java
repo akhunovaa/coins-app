@@ -1,18 +1,18 @@
 package ru.leon4uk.coins.app.web.config;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
-import ru.leon4uk.app.bot.BotApplication;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.annotation.Resource;
 
+
 @Configuration
-@ComponentScan(basePackages = "ru.leon4uk.coins.app.web")
+@ComponentScan({"ru.leon4uk.coins.app.domain", "ru.leon4uk.coins.app.dao", "ru.leon4uk.coins.app.service", "ru.leon4uk.coins.app.web"})
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 
@@ -24,13 +24,13 @@ public class AppConfig {
     @Resource
     private Environment env;
 
-    @Bean(destroyMethod = "close")
-    public BasicDataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(env.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
-        dataSource.setUrl(env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
-        dataSource.setUsername(env.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
-        dataSource.setPassword(env.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
+    @Bean
+    public DriverManagerDataSource dataSource(){
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(env.getProperty(PROPERTY_NAME_DATABASE_DRIVER).trim());
+        dataSource.setUrl(env.getProperty(PROPERTY_NAME_DATABASE_URL).trim());
+        dataSource.setUsername(env.getProperty(PROPERTY_NAME_DATABASE_USERNAME).trim());
+        dataSource.setPassword(env.getProperty(PROPERTY_NAME_DATABASE_PASSWORD).trim());
         return dataSource;
     }
 
@@ -40,9 +40,5 @@ public class AppConfig {
                 dataSource());
     }
 
-    @Bean
-    public BotApplication botApplication() {
-        return new BotApplication();
-    }
 
 }

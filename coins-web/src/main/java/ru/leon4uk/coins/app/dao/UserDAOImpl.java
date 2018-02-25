@@ -1,9 +1,8 @@
-package ru.leon4uk.coins.app.dao.impl;
+package ru.leon4uk.coins.app.dao;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.leon4uk.coins.app.dao.UserDAO;
 import ru.leon4uk.coins.app.domain.User;
 
 import java.util.List;
@@ -23,14 +22,12 @@ public class UserDAOImpl implements UserDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<User> listUser() {
-        return sessionFactory.getCurrentSession().createQuery("from User")
-                .list();
+        return sessionFactory.openSession().createQuery("from User").list();
     }
 
     @Override
     public void removeUser(Integer id) {
-        User user = (User) sessionFactory.getCurrentSession().load(
-                User.class, id);
+        User user = (User) sessionFactory.getCurrentSession().load(User.class, id);
         if (null != user) {
             sessionFactory.getCurrentSession().delete(user);
         }

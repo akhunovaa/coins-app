@@ -1,4 +1,4 @@
-package ru.leon4uk.coins.app.service.impl;
+package ru.leon4uk.coins.app.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void removeUser(Integer id) {
         userDAO.removeUser(id);
     }
