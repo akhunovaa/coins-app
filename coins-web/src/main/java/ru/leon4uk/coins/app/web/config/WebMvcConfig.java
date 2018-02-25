@@ -7,7 +7,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import ru.leon4uk.coins.app.web.database.Service;
 
 @EnableWebMvc
 @Configuration
@@ -27,8 +26,4 @@ class WebMvcConfig extends WebMvcConfigurerAdapter {
         return resolver;
     }
 
-    @Bean
-    public Service databaseService() {
-        return new Service();
-    }
 }
