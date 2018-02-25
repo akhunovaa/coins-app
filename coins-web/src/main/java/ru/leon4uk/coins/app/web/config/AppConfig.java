@@ -44,4 +44,5 @@ public class AppConfig {
     public BotApplication botApplication() {
         return new BotApplication();
     }
+
 }

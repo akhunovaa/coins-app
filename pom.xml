@@ -35,6 +35,7 @@
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <spring-jdbc.version>4.3.10.RELEASE</spring-jdbc.version>
         <spring.version>4.0.2.RELEASE</spring.version>
+        <persistence.version>1.0</persistence.version>
         <postgresql.version>9.1-901.jdbc4</postgresql.version>
         <gagawa.version>1.0.1</gagawa.version>
         <json.version>20160810</json.version>

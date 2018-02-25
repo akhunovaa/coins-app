@@ -56,22 +56,6 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.5.0</version>
-                <configuration>
-                    <container>
-                        <containerId>tomcat7x</containerId>
-                        <type>installed</type>
-                        <home>/opt/web/apache-tomcat-7.0.84n</home>
-                    </container>
-                    <configuration>
-                        <type>existing</type>
-                        <home>/opt/web/apache-tomcat-7.0.84</home>
-                    </configuration>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -83,6 +67,11 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -98,6 +87,24 @@
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>${persistence.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.2-GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.13.Final</version>
         </dependency>
 
     </dependencies>
