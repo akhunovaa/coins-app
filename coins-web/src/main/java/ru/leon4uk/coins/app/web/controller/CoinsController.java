@@ -27,12 +27,17 @@ class CoinsController {
 
     @RequestMapping("/")
     public String home() {
-        return "redirect:/index";
+        return "redirect:/bot";
     }
 
     @RequestMapping("/login")
     public String login() {
         return "login";
+    }
+
+    @RequestMapping("/bot")
+    public String bot() {
+        return "bot";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)

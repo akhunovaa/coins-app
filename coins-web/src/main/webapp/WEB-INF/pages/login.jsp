@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
-    <title>Авторизаци</title>
+    <title>Авторизация</title>
 </head>
 <body>
 

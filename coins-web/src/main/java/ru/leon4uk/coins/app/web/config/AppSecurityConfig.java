@@ -13,20 +13,17 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("test2").password("test2").roles("USER");
-        auth.inMemoryAuthentication().withUser("test").password("test").roles("ADMIN");
-        auth.inMemoryAuthentication().withUser("leon4uk").password("leon4uk").roles("SUPERADMIN");
+        auth.inMemoryAuthentication().withUser("test").password("test").roles("USER");
+        auth.inMemoryAuthentication().withUser("leon4uk").password("leon4uk").roles("ADMIN");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/index*").access("hasRole('ROLE_USER')")
-                .antMatchers("/index*").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/index*").access("hasRole('ROLE_SUPERADMIN')")
+                .antMatchers("/index*").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers("/bot").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers("/delete/*").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/add").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/add").access("hasRole('ROLE_SUPERADMIN')")
-                .antMatchers("/delete/*").access("hasRole('ROLE_SUPERADMIN')")
                 .and().formLogin().defaultSuccessUrl("/login", false);
     }
 }
