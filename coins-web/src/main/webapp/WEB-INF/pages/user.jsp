@@ -11,10 +11,6 @@
 </head>
 <body>
 
-<a href="<c:url value="/logout" />">
-    Выход
-</a>
-
 <h2>Менеджер</h2>
 
 <form:form method="post" action="add" commandName="user">
@@ -63,5 +59,11 @@
     </table>
 </c:if>
 
+<c:url var="logoutUrl" value="/logout" />
+<form action="${logoutUrl}" id="logout" method="post">
+    <input type="hidden" name="${_csrf.parameterName}"
+           value="${_csrf.token}" />
+    <input type="submit" name="submit" value="Log Out">
+</form>
 </body>
 </html>

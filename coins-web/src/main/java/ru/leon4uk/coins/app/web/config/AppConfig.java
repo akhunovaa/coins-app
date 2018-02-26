@@ -10,7 +10,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.annotation.Resource;
 
-
 @Configuration
 @ComponentScan({"ru.leon4uk.coins.app.domain", "ru.leon4uk.coins.app.dao", "ru.leon4uk.coins.app.service", "ru.leon4uk.coins.app.web"})
 @PropertySource("classpath:application.properties")
