@@ -1,4 +1,4 @@
-package ru.leon4uk.coins.app.domain;
+package ru.leon4uk.coins.web.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

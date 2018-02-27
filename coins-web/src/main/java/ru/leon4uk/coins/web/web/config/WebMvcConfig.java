@@ -1,4 +1,4 @@
-package ru.leon4uk.coins.app.web.config;
+package ru.leon4uk.coins.web.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

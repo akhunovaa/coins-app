@@ -1,13 +1,18 @@
-package ru.leon4uk.coins.app.web.controller;
+package ru.leon4uk.coins.web.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.leon4uk.coins.app.domain.User;
-import ru.leon4uk.coins.app.service.UserService;
+
+import ru.leon4uk.app.bot.BotApplication;
+import ru.leon4uk.coins.web.domain.User;
+import ru.leon4uk.coins.web.service.UserService;
+
 
 import java.util.Map;
 
@@ -17,6 +22,12 @@ class CoinsController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    @Autowired
+    private ApplicationContext context;
 
     @RequestMapping("/index")
     public String listUser(Map<String, Object> map) {
@@ -37,6 +48,8 @@ class CoinsController {
 
     @RequestMapping("/bot")
     public String bot() {
+//       BotApplication botApplication = context.getBean(BotApplication.class);
+//       threadPoolTaskExecutor.execute(botApplication);
         return "bot";
     }
 

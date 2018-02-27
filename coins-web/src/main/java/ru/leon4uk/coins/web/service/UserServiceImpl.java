@@ -1,11 +1,10 @@
-package ru.leon4uk.coins.app.service;
+package ru.leon4uk.coins.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.leon4uk.coins.app.dao.UserDAO;
-import ru.leon4uk.coins.app.domain.User;
-import ru.leon4uk.coins.app.service.UserService;
+import ru.leon4uk.coins.web.dao.UserDAO;
+import ru.leon4uk.coins.web.domain.User;
 
 import java.util.List;
 

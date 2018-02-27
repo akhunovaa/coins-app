@@ -1,4 +1,4 @@
-package ru.leon4uk.coins.app.domain;
+package ru.leon4uk.app.domain;
 
 import javax.persistence.*;
 

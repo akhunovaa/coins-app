@@ -1,4 +1,4 @@
-package ru.leon4uk.coins.app.web.config;
+package ru.leon4uk.coins.web.web.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class HibernateConfig {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
         sessionFactory.setHibernateProperties(hibernateProperties());
-        sessionFactory.setPackagesToScan("ru.leon4uk.coins.app.domain");
+        sessionFactory.setPackagesToScan("ru.leon4uk.coins.web.domain");
         return sessionFactory;
     }
 

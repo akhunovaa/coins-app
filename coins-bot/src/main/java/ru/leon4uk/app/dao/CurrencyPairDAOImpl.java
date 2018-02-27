@@ -1,10 +1,10 @@
-package ru.leon4uk.coins.app.dao;
+package ru.leon4uk.app.dao;
 
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.leon4uk.coins.app.domain.CurrencyPair;
+import ru.leon4uk.app.domain.CurrencyPair;
 
 import java.util.List;
 
