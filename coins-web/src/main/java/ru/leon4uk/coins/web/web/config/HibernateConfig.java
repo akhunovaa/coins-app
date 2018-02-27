@@ -17,9 +17,6 @@ import java.util.Properties;
 public class HibernateConfig {
 
     @Autowired
-    Environment env;
-
-    @Autowired
     private DriverManagerDataSource dataSource;
 
     @Bean
@@ -27,7 +24,7 @@ public class HibernateConfig {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
         sessionFactory.setHibernateProperties(hibernateProperties());
-        sessionFactory.setPackagesToScan("ru.leon4uk.coins.web.domain");
+        sessionFactory.setPackagesToScan("ru.leon4uk.coins.web.domain", "ru.leon4uk.app.domain");
         return sessionFactory;
     }
 

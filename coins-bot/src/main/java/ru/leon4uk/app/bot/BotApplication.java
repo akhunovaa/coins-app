@@ -13,6 +13,9 @@ public class BotApplication implements Runnable{
 
     private final static Logger logger = Logger.getLogger(BotApplication.class);
     private ObjectMapper objectMapper;
+    private String currencyPair;
+    private int firstRialto;
+    private int secondRialto;
 
     @Autowired
     private CurrencyPairService currencyPairService;
@@ -22,5 +25,9 @@ public class BotApplication implements Runnable{
 
     public void run() {
         currencyPairService.listCurrencyPair().forEach(currencyPair -> logger.info(currencyPair.getPairValue()));
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 }

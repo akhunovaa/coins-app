@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import ru.leon4uk.app.bot.BotApplication;
+import ru.leon4uk.app.service.CurrencyPairService;
 import ru.leon4uk.coins.web.domain.User;
 import ru.leon4uk.coins.web.service.UserService;
 
@@ -22,6 +23,9 @@ class CoinsController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CurrencyPairService currencyPairService;
 
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
@@ -48,8 +52,8 @@ class CoinsController {
 
     @RequestMapping("/bot")
     public String bot() {
-//       BotApplication botApplication = context.getBean(BotApplication.class);
-//       threadPoolTaskExecutor.execute(botApplication);
+        BotApplication botApplication = context.getBean(BotApplication.class);
+      threadPoolTaskExecutor.execute(botApplication);
         return "bot";
     }
 
