@@ -1,19 +1,18 @@
 package ru.leon4uk.coins.web.web.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import ru.leon4uk.app.bot.BotApplication;
 
 import javax.annotation.Resource;
 
 @Configuration
-@ComponentScan({"ru.leon4uk.coins.web"})
+@ComponentScan({"ru.leon4uk.coins.web", "ru.leon4uk.app"})
 @PropertySource("classpath:application.properties")
+@Import({BotApplication.class})
 public class AppConfig {
 
     private static final String PROPERTY_NAME_DATABASE_DRIVER = "app.db.worker.driver";
