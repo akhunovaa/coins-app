@@ -10,10 +10,23 @@
     <modelVersion>4.0.0</modelVersion>
 
 
-    <groupId>ru.leon4uk.coins.app.bot</groupId>
+    <groupId>ru.leon4uk.coins.bot</groupId>
     <artifactId>coins-bot</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <name>Бот, который должен работать как раб</name>
     <description>Бот, который плюсует монетки</description>
@@ -29,23 +42,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots</artifactId>
-            <version>${telegram.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ru.leon4uk.coins</groupId>
-            <artifactId>coins-maker</artifactId>
-            <version>${apidaemon.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
-
     </dependencies>
 
 </project>

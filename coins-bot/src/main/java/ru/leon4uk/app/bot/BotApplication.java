@@ -2,20 +2,25 @@ package ru.leon4uk.app.bot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import ru.leon4uk.app.service.CurrencyPairService;
 
+@Component
+@Scope("prototype")
 public class BotApplication implements Runnable{
 
     private final static Logger logger = Logger.getLogger(BotApplication.class);
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private CurrencyPairService currencyPairService;
 
-    public BotApplication(int firstRialto, int secondRialto, String pair) {
-
+    public BotApplication() {
     }
 
     public void run() {
-
+        currencyPairService.listCurrencyPair().forEach(currencyPair -> logger.info(currencyPair.getPairValue()));
     }
 }

@@ -1,4 +1,4 @@
-package ru.leon4uk.coins.app.web.initializer;
+package ru.leon4uk.coins.web.web.initializer;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

@@ -1,6 +1,6 @@
-package ru.leon4uk.coins.app.service;
+package ru.leon4uk.app.service;
 
-import ru.leon4uk.coins.app.domain.CurrencyPair;
+import ru.leon4uk.app.domain.CurrencyPair;
 
 import java.util.List;
 

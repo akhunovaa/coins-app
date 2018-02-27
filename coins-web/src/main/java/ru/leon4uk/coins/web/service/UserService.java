@@ -1,10 +1,10 @@
-package ru.leon4uk.coins.app.dao;
+package ru.leon4uk.coins.web.service;
 
-import ru.leon4uk.coins.app.domain.User;
+import ru.leon4uk.coins.web.domain.User;
 
 import java.util.List;
 
-public interface UserDAO {
+public interface UserService {
 
     public void addUser(User user);
 

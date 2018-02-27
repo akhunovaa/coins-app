@@ -1,9 +1,9 @@
-package ru.leon4uk.coins.app.dao;
+package ru.leon4uk.coins.web.dao;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.leon4uk.coins.app.domain.User;
+import ru.leon4uk.coins.web.domain.User;
 
 import java.util.List;
 

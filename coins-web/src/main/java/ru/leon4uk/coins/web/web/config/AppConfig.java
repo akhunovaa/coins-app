@@ -1,4 +1,4 @@
-package ru.leon4uk.coins.app.web.config;
+package ru.leon4uk.coins.web.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -7,11 +7,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.Resource;
 
 @Configuration
-@ComponentScan({"ru.leon4uk.coins.app.domain", "ru.leon4uk.coins.app.dao", "ru.leon4uk.coins.app.service", "ru.leon4uk.coins.app.web"})
+@ComponentScan({"ru.leon4uk.coins.web"})
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 
@@ -37,6 +38,15 @@ public class AppConfig {
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(
                 dataSource());
+    }
+
+    @Bean
+    public ThreadPoolTaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
+        pool.setCorePoolSize(5);
+        pool.setMaxPoolSize(10);
+        pool.setWaitForTasksToCompleteOnShutdown(true);
+        return pool;
     }
 
 
