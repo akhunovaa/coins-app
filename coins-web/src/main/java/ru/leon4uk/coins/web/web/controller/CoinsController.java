@@ -52,8 +52,8 @@ class CoinsController {
 
     @RequestMapping("/bot")
     public String bot() {
-        BotApplication botApplication = context.getBean(BotApplication.class);
-      threadPoolTaskExecutor.execute(botApplication);
+        //BotApplication botApplication = context.getBean(BotApplication.class);
+      //threadPoolTaskExecutor.execute(botApplication);
         return "bot";
     }
 
