@@ -1,12 +1,9 @@
 package ru.leon4uk.app.bot.impl;
 
-//import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.leon4uk.coins.service.Api;
-import ru.leon4uk.coins.service.RialtoEn;
+import ru.leon4uk.coins.service.ApiService;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,15 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ComplexCollector implements Runnable{
 
     private final static Logger logger = Logger.getLogger(ComplexCollector.class);
-    private ObjectMapper objectMapper;
-    private Api firstRialto;
-    private Api secondRialto;
-    private RialtoEn firstRialtoEn;
-    private RialtoEn secondRialtoEn;
+    private ApiService firstRialto;
+    private ApiService firstRialtoHelp;
+    private ApiService secondRialto;
     private String firstCurrencyPairOne;
     private String firstCurrencyPairTwo;
     private String secondCurrencyPair;
-    ConcurrentHashMap<String, Double> tradeValues;
+    private ConcurrentHashMap<String, Double> tradeValues;
 
     public ComplexCollector() {
 
@@ -34,32 +29,38 @@ public class ComplexCollector implements Runnable{
     public void run() {
         tradeValues = new ConcurrentHashMap<>();
         try {
-            RialtoEn firstMainRialtoEn = objectMapper.readValue(firstRialto.getDepthPair(firstCurrencyPairOne), firstRialtoEn.getClass());
-            RialtoEn firstHelpRialtoEn = objectMapper.readValue(firstRialto.getDepthPair(firstCurrencyPairTwo), firstRialtoEn.getClass());
-            RialtoEn secondMainRialtoEn = objectMapper.readValue(secondRialto.getDepthPair(secondCurrencyPair), secondRialtoEn.getClass());
 
-           logger.info(firstMainRialtoEn);
-           logger.info(firstHelpRialtoEn);
-           logger.info(secondMainRialtoEn);
+           logger.info(firstRialto.getAskPrices(firstCurrencyPairOne));
+           logger.info(firstRialtoHelp.getAskPrices(firstCurrencyPairTwo));
+           logger.info(secondRialto.getAskPrices(secondCurrencyPair));
+
         } catch (IOException e) {
             logger.error("Ошибка в запросе API",e);
         }
 
     }
 
-    public Api getFirstRialto() {
+    public ApiService getFirstRialto() {
         return firstRialto;
     }
 
-    public void setFirstRialto(Api firstRialto) {
+    public void setFirstRialto(ApiService firstRialto) {
         this.firstRialto = firstRialto;
     }
 
-    public Api getSecondRialto() {
+    public ApiService getFirstRialtoHelp() {
+        return firstRialtoHelp;
+    }
+
+    public void setFirstRialtoHelp(ApiService firstRialtoHelp) {
+        this.firstRialtoHelp = firstRialtoHelp;
+    }
+
+    public ApiService getSecondRialto() {
         return secondRialto;
     }
 
-    public void setSecondRialto(Api secondRialto) {
+    public void setSecondRialto(ApiService secondRialto) {
         this.secondRialto = secondRialto;
     }
 
@@ -85,29 +86,5 @@ public class ComplexCollector implements Runnable{
 
     public void setSecondCurrencyPair(String secondCurrencyPair) {
         this.secondCurrencyPair = secondCurrencyPair;
-    }
-
-    public RialtoEn getFirstRialtoEn() {
-        return firstRialtoEn;
-    }
-
-    public void setFirstRialtoEn(RialtoEn firstRialtoEn) {
-        this.firstRialtoEn = firstRialtoEn;
-    }
-
-    public RialtoEn getSecondRialtoEn() {
-        return secondRialtoEn;
-    }
-
-    public void setSecondRialtoEn(RialtoEn secondRialtoEn) {
-        this.secondRialtoEn = secondRialtoEn;
-    }
-
-    public ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
-
-    public void setObjectMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
     }
 }
