@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
@@ -98,6 +97,7 @@ public class ComplexCollector implements Runnable{
                 buy.setMinAskPriceTwo(minAskPriceSecond);
                 buy.setRialtoId(secondRialtoId);
                 buy.setPair(secondCurrencyPair);
+                buy.setRialto(secondRialto);
                 context.getBean(ScheduledExecutorService.class).execute(buy);
                 reverse = true;
             }else {
