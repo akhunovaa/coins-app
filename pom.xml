@@ -42,12 +42,13 @@
         <json.version>20160810</json.version>
         <junit.version>4.12</junit.version>
         <javax.version>3.1.0</javax.version>
+        <jackson.version>2.4.6</jackson.version>
         <spring.version>4.0.2.RELEASE</spring.version>
         <spring-jdbc.version>4.3.10.RELEASE</spring-jdbc.version>
         <postgresql.version>9.1-901.jdbc4</postgresql.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <spring-jdbc.version>4.3.10.RELEASE</spring-jdbc.version>
-        <telegram.version>3.4</telegram.version>
+        <telegram.version>3.6</telegram.version>
         <apidaemon.version>1.0-SNAPSHOT</apidaemon.version>
         <gson.version>2.8.0</gson.version>
         <log4j.version>1.2.17</log4j.version>
@@ -74,7 +75,6 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>postgresql</groupId>
@@ -114,17 +114,33 @@
         </dependency>
 
         <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots</artifactId>
-            <version>${telegram.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
             <version>${persistence.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>ru.leon4uk.coins.bot</groupId>
+            <artifactId>coins-bot</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+            <!--<artifactId>jackson-databind</artifactId>-->
+            <!--<version>${jackson.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.fasterxml.jackson.jaxrs</groupId>-->
+            <!--<artifactId>jackson-jaxrs-json-provider</artifactId>-->
+            <!--<version>${jackson.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+             <!--<artifactId>jackson-databind</artifactId>-->
+              <!--<version>${jackson.version}</version>-->
+        <!--</dependency>-->
 
     </dependencies>
 
