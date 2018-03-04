@@ -1,18 +1,22 @@
 package ru.leon4uk.coins.web.web.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import ru.leon4uk.app.bot.BotApplication;
+import ru.leon4uk.app.bot.BotManager;
 
 import javax.annotation.Resource;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @Configuration
 @ComponentScan({"ru.leon4uk.coins.web", "ru.leon4uk.app"})
 @PropertySource("classpath:application.properties")
-@Import({BotApplication.class})
+@Import({BotManager.class})
 public class AppConfig {
 
     private static final String PROPERTY_NAME_DATABASE_DRIVER = "app.db.worker.driver";
@@ -48,5 +52,14 @@ public class AppConfig {
         return pool;
     }
 
+    @Bean
+    public ScheduledExecutorService scheduledExecutorService() {
+        return Executors.newScheduledThreadPool(5);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
 
 }

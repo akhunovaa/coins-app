@@ -2,21 +2,18 @@ package ru.leon4uk.coins.web.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import ru.leon4uk.app.bot.BotApplication;
+import ru.leon4uk.app.bot.BotManager;
 import ru.leon4uk.app.service.CurrencyPairService;
 import ru.leon4uk.coins.web.domain.User;
 import ru.leon4uk.coins.web.service.UserService;
 
-
 import java.util.Map;
-
 
 @Controller
 class CoinsController {
@@ -25,13 +22,10 @@ class CoinsController {
     private UserService userService;
 
     @Autowired
-    private CurrencyPairService currencyPairService;
-
-    @Autowired
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
-
-    @Autowired
     private ApplicationContext context;
+
+    @Autowired
+    private CurrencyPairService currencyPairService;
 
     @RequestMapping("/index")
     public String listUser(Map<String, Object> map) {
@@ -52,8 +46,9 @@ class CoinsController {
 
     @RequestMapping("/bot")
     public String bot() {
-        //BotApplication botApplication = context.getBean(BotApplication.class);
-      //threadPoolTaskExecutor.execute(botApplication);
+        BotManager botApplication = context.getBean(BotManager.class);
+        botApplication.setContext(context);
+        botApplication.newComplexCollectorExecuter("Bitfinex", "Bitsane", "ltcusd", "xrpusd", "XRP_LTC");
         return "bot";
     }
 
