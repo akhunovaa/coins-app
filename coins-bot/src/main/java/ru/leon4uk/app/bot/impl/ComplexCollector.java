@@ -32,6 +32,9 @@ public class ComplexCollector implements Runnable{
     private String firstCurrencyPairOne;
     private String firstCurrencyPairTwo;
     private String secondCurrencyPair;
+    private int firstRialtoId;
+    private int secondRialtoId;
+    private int currencyPairId;
 
     public ComplexCollector() {
 
@@ -80,6 +83,9 @@ public class ComplexCollector implements Runnable{
             statistics.setFirstBidPriecLtc(maxBidPriceOneFirst);
             statistics.setSecondAskPrice(minAskPriceSecond);
             statistics.setSecondBidPrice(maxBidPriceSecond);
+            statistics.setFirstRialtoId(firstRialtoId);
+            statistics.setSecondRialtoId(secondRialtoId);
+            statistics.setCurrencyPairId(currencyPairId);
 
             statisticsService.addStatistics(statistics);
 
@@ -167,5 +173,29 @@ public class ComplexCollector implements Runnable{
 
     public void setPercentTwo(double percentTwo) {
         this.percentTwo = percentTwo;
+    }
+
+    public int getFirstRialtoId() {
+        return firstRialtoId;
+    }
+
+    public void setFirstRialtoId(int firstRialtoId) {
+        this.firstRialtoId = firstRialtoId;
+    }
+
+    public int getSecodRialtoId() {
+        return secondRialtoId;
+    }
+
+    public void setSecodRialtoId(int secodRialtoId) {
+        this.secondRialtoId = secodRialtoId;
+    }
+
+    public int getCurrencyPairId() {
+        return currencyPairId;
+    }
+
+    public void setCurrencyPairId(int currencyPairId) {
+        this.currencyPairId = currencyPairId;
     }
 }

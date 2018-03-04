@@ -48,7 +48,7 @@ class CoinsController {
     public String bot() {
         BotManager botApplication = context.getBean(BotManager.class);
         botApplication.setContext(context);
-        botApplication.newComplexCollectorExecuter("Bitfinex", "Bitsane", "ltcusd", "xrpusd", "XRP_LTC");
+        botApplication.newComplexCollectorExecuter(4, 6, "ltcusd", "xrpusd", "XRP_LTC", 232);
         return "bot";
     }
 
