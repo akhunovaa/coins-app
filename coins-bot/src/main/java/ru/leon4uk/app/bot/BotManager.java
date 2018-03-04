@@ -22,12 +22,14 @@ public class BotManager implements BotApplication{
     private final static Logger logger = Logger.getLogger(BotManager.class);
 
     private ApplicationContext context;
+    private int firstrialtoId;
+    private int secondrialtoId;
 
     public BotManager() {
     }
 
     @Override
-    public void newComplexCollectorExecuter(String firstRialto, String secondRialto, String firstCurrencyPairOne, String firstCurrencyPairTwo, String secondCurrencyPair) {
+    public void newComplexCollectorExecuter(int firstRialto, int secondRialto, String firstCurrencyPairOne, String firstCurrencyPairTwo, String secondCurrencyPair, int currencyPairId) {
 
       ApiService firtRialtoS;
       ApiService firtRialtoHelpS;
@@ -44,6 +46,8 @@ public class BotManager implements BotApplication{
             complexCollector.setFirstCurrencyPairOne(firstCurrencyPairOne);
             complexCollector.setFirstCurrencyPairTwo(firstCurrencyPairTwo);
             complexCollector.setSecondCurrencyPair(secondCurrencyPair);
+            complexCollector.setFirstRialtoId(firstRialto);
+            complexCollector.setSecodRialtoId(secondRialto);
             logger.info("Начинаем работу с биржами " + firstRialto + " " + secondRialto);
             context.getBean(ScheduledExecutorService.class).scheduleAtFixedRate(complexCollector, 10, 10, TimeUnit.SECONDS);
 
@@ -53,19 +57,19 @@ public class BotManager implements BotApplication{
 
     }
 
-    private ApiService getRialto(String rialto) throws Exception {
+    private ApiService getRialto(int rialto) throws Exception {
         switch (rialto){
-            case "Poloniex":
+            case 2:
                 return new PoloniexApi("https://poloniex.com/public?command=");
-            case "Wex":
+            case 1:
                 return new WexApi("https://wex.nz/api/3/");
-            case "Binance":
+            case 5:
                 return new BinanceApi("https://www.binance.com/api/v1/");
-            case "Kraken":
+            case 3:
                 return new KrakenApi("https://api.kraken.com/0/");
-            case "Bitfinex":
+            case 4:
                 return new BitfinexApi("https://api.bitfinex.com/v1/");
-            case "Bitsane":
+            case 6:
                 return new BitsaneApi("https://bitsane.com");
             default:
                 throw new Exception("rialto not found: " + rialto);

@@ -48,6 +48,15 @@ public class Statistics {
     @Column(name = "bid_marge_two")
     private Double bidMargeTwo;
 
+    @Column(name = "first_rialto_id")
+    private Integer firstRialtoId;
+
+    @Column(name = "second_rialto_id")
+    private Integer secondRialtoId;
+
+    @Column(name = "currency_pair_id")
+    private Integer currencyPairId;
+
     public Integer getId() {
         return id;
     }
@@ -150,5 +159,29 @@ public class Statistics {
 
     public void setBidMargeTwo(Double bidMargeTwo) {
         this.bidMargeTwo = bidMargeTwo;
+    }
+
+    public Integer getFirstRialtoId() {
+        return firstRialtoId;
+    }
+
+    public void setFirstRialtoId(Integer firstRialtoId) {
+        this.firstRialtoId = firstRialtoId;
+    }
+
+    public Integer getSecondRialtoId() {
+        return secondRialtoId;
+    }
+
+    public void setSecondRialtoId(Integer secondRialtoId) {
+        this.secondRialtoId = secondRialtoId;
+    }
+
+    public Integer getCurrencyPairId() {
+        return currencyPairId;
+    }
+
+    public void setCurrencyPairId(Integer currencyPairId) {
+        this.currencyPairId = currencyPairId;
     }
 }
