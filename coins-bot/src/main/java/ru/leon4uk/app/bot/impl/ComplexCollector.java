@@ -109,6 +109,7 @@ public class ComplexCollector implements Runnable{
                 sell.setMaxBidPriceTwo(maxBidPriceSecond);
                 sell.setRialtoId(secondRialtoId);
                 sell.setPair(secondCurrencyPair);
+                sell.setRialto(secondRialto);
                 context.getBean(ScheduledExecutorService.class).execute(sell);
                 reverse = false;
             }else {

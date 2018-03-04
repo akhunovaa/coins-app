@@ -17,30 +17,23 @@ public class Buy implements Runnable {
     private double minAskPriceTwo;
     private int rialtoId;
     private String pair;
-    double fee = 0.25;
 
     public Buy() {
     }
 
     @Override
     public void run() {
-        logger.info("buy");
-
-        double buyPrice = minAskPriceTwo; //находим минимальную цену. за которую продадут XRP. ask ордера на продажу
+        logger.info("BUY: MARGE-" + marge + " PRICE-" + minAskPriceTwo + " PAIR-" + pair + "CURRENCY_BUY-" + "XRP");
+        double balance = 0.0;
+        double buyPrice = minAskPriceTwo;
         try {
-            rialto.getBalance();
+            balance = Double.valueOf(rialto.getBitsaneBalance("LTC"));
+            rialto.newOrder(pair, balance, buyPrice, "buy");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
         }
-//        double ltcBalanceOrder = ltcBalanceSecond;
-//
-//        ltcBalanceSecond = ltcBalanceSecond - ltcBalanceOrder; //Минусуем баланс LTC на кол-во выставленного ордера монет
-//
-//        double xrpBoughtAmount = buy(buyPrice, ltcBalanceOrder, fee);//осуществляем покупку XRP
-//
-//        dataBaseWorker.balanceUp(xrpBoughtAmount + xrpBalanceSecond, secondRialtoId, xrpId);//обновляем баланс купленного Риппла
-//        dataBaseWorker.balanceUp(ltcBalanceSecond, secondRialtoId, ltcId);//обновляем баланс потраченного на покупку Риппла LTC
-//        dataBaseWorker.tradeHistoryInsert(2, buyPrice, ltcBalanceOrder, fee, secondRialtoId, currencies[0] + "->" + currencies[1], xrpBoughtAmount, priceDifferenceOld, ltcBalance, xrpBalance, ltcBalanceSecond, xrpBoughtAmount + xrpBalanceSecond, priceDifferenceOld, minAskPriceTwo, 0);
+        logger.info("BOUGHT: MARGE-" + marge + " PRICE-" + minAskPriceTwo + " PAIR-" + pair + "CURRENCY_BUY-" + "XRP");
+
     }
 
     private double buy(double buyPrice, double buyAmount, double buyFee) {
