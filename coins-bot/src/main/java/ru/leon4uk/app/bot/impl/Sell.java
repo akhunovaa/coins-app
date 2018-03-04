@@ -13,6 +13,7 @@ public class Sell implements Runnable {
     private double maxBidPriceTwo;
     private int rialtoId;
     private String pair;
+    double fee = 0.25;
 
     public Sell() {
     }
@@ -20,7 +21,15 @@ public class Sell implements Runnable {
     @Override
     public void run() {
         logger.info("sell");
+
     }
+
+    private double sell(double sellPrice, double sellAmount, double sellFee) {
+        double buy = sellAmount * sellPrice;
+        double fee = sellAmount / 100 * sellFee;
+        return buy - fee;
+    }
+
 
     public double getMarge() {
         return marge;
