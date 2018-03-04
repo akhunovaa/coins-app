@@ -2,6 +2,7 @@ package ru.leon4uk.app.bot.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.leon4uk.app.domain.Statistics;
@@ -11,7 +12,8 @@ import ru.leon4uk.coins.service.ApiService;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,6 +23,7 @@ public class ComplexCollector implements Runnable{
     @Autowired
     private StatisticsService statisticsService;
 
+    private ApplicationContext context;
 
     private boolean reverse;
     private final static Logger logger = Logger.getLogger(ComplexCollector.class);
@@ -90,12 +93,24 @@ public class ComplexCollector implements Runnable{
             statisticsService.addStatistics(statistics);
 
             if (margeAskTwo <= percentOne && margeAskTwo != -100 && !reverse){
-               // executeTradeBitSaneBuy(margeAskTwo, minAskPriceSecond, secondRialto, firstRialto,  secondCurrencyPair);
+                Buy buy = new Buy();
+                buy.setMarge(margeAskTwo);
+                buy.setMinAskPriceTwo(minAskPriceSecond);
+                buy.setRialtoId(secondRialtoId);
+                buy.setPair(secondCurrencyPair);
+                context.getBean(ScheduledExecutorService.class).execute(buy);
+                reverse = true;
             }else {
                 logger.info("Failure <Bitsane> Buy <= " + " margeAskTwo: " + margeAskTwo + " percentOne: " + percentOne + " !reversetwo: " + reverse);
             }
             if (margeABidTwo >= percentTwo && margeABidTwo != 100 && reverse){
-               // executeTradeBitSaneSell(margeABidTwo, maxBidPriceSecond, secondRialto, firstRialto,  secondCurrencyPair);
+                Sell sell = new Sell();
+                sell.setMarge(margeABidTwo);
+                sell.setMaxBidPriceTwo(maxBidPriceSecond);
+                sell.setRialtoId(secondRialtoId);
+                sell.setPair(secondCurrencyPair);
+                context.getBean(ScheduledExecutorService.class).execute(sell);
+                reverse = false;
             }else {
                 logger.info("Failure <Bitsane> Sell >= " + " margeABidTwo: " + margeABidTwo + " percentTwo: " + percentTwo + " reversetwo: " + reverse);
             }
@@ -197,5 +212,13 @@ public class ComplexCollector implements Runnable{
 
     public void setCurrencyPairId(int currencyPairId) {
         this.currencyPairId = currencyPairId;
+    }
+
+    public ApplicationContext getContext() {
+        return context;
+    }
+
+    public void setContext(ApplicationContext context) {
+        this.context = context;
     }
 }

@@ -22,8 +22,6 @@ public class BotManager implements BotApplication{
     private final static Logger logger = Logger.getLogger(BotManager.class);
 
     private ApplicationContext context;
-    private int firstrialtoId;
-    private int secondrialtoId;
 
     public BotManager() {
     }
@@ -48,6 +46,8 @@ public class BotManager implements BotApplication{
             complexCollector.setSecondCurrencyPair(secondCurrencyPair);
             complexCollector.setFirstRialtoId(firstRialto);
             complexCollector.setSecodRialtoId(secondRialto);
+            complexCollector.setContext(context);
+            complexCollector.setCurrencyPairId(currencyPairId);
             logger.info("Начинаем работу с биржами " + firstRialto + " " + secondRialto);
             context.getBean(ScheduledExecutorService.class).scheduleAtFixedRate(complexCollector, 10, 10, TimeUnit.SECONDS);
 
