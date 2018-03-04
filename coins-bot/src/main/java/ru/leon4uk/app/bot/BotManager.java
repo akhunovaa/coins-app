@@ -44,6 +44,7 @@ public class BotManager implements BotApplication{
             complexCollector.setFirstCurrencyPairOne(firstCurrencyPairOne);
             complexCollector.setFirstCurrencyPairTwo(firstCurrencyPairTwo);
             complexCollector.setSecondCurrencyPair(secondCurrencyPair);
+            logger.info("Начинаем работу с биржами " + firstRialto + " " + secondRialto);
             context.getBean(ScheduledExecutorService.class).scheduleAtFixedRate(complexCollector, 10, 10, TimeUnit.SECONDS);
 
         } catch (Exception e) {
