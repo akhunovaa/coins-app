@@ -17,6 +17,7 @@ public class Buy implements Runnable {
     private double minAskPriceTwo;
     private int rialtoId;
     private String pair;
+    private double fee = 0.25;
 
     public Buy() {
     }
@@ -28,7 +29,8 @@ public class Buy implements Runnable {
         double buyPrice = minAskPriceTwo;
         try {
             balance = Double.valueOf(rialto.getBitsaneBalance("LTC"));
-            rialto.newOrder(pair, balance, buyPrice, "buy");
+            double buyAmount = balance / buyPrice;
+            rialto.newOrder(pair, buyAmount, buyPrice, "buy");
         } catch (IOException e) {
             logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
         }

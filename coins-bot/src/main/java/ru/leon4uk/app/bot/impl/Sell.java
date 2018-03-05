@@ -10,12 +10,13 @@ import java.io.IOException;
 @Component
 @Scope("prototype")
 public class Sell implements Runnable {
-    private final static Logger logger = Logger.getLogger(Buy.class);
+    private final static Logger logger = Logger.getLogger(Sell.class);
     private ApiService rialto;
     private double marge;
     private double maxBidPriceTwo;
     private int rialtoId;
     private String pair;
+    private double fee = 0.25;
 
     public Sell() {
     }
@@ -27,7 +28,8 @@ public class Sell implements Runnable {
         double sellPrice = maxBidPriceTwo;
         try {
             balance = Double.valueOf(rialto.getBitsaneBalance("XRP"));
-            rialto.newOrder(pair, balance, sellPrice, "sell");
+            double sellAmount = balance * sellPrice;
+            rialto.newOrder(pair, sellAmount, sellPrice, "sell");
         } catch (IOException e) {
             logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
         }
