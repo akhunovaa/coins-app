@@ -58,6 +58,14 @@ class CoinsController {
         return "redirect:/bot";
     }
 
+    @RequestMapping("/order/{id}/cancel")
+    public String orderCancel(@PathVariable String id) {
+        BotManager botApplication = context.getBean(BotManager.class);
+        botApplication.setContext(context);
+        botApplication.orderCancel(id);
+        return "redirect:/bot";
+    }
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
