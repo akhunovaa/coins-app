@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.leon4uk.app.bot.BotApplication;
 import ru.leon4uk.app.bot.BotManager;
+import ru.leon4uk.app.domain.Statistics;
 import ru.leon4uk.app.service.CurrencyPairService;
+import ru.leon4uk.app.service.StatisticsService;
 import ru.leon4uk.coins.web.domain.User;
 import ru.leon4uk.coins.web.service.UserService;
 
@@ -17,6 +18,9 @@ import java.util.Map;
 
 @Controller
 class CoinsController {
+
+    @Autowired
+    private StatisticsService statisticService;
 
     @Autowired
     private UserService userService;
@@ -45,8 +49,9 @@ class CoinsController {
     }
 
     @RequestMapping("/bot")
-    public String bot() {
-
+    public String bot(Map<String, Object> map) {
+        map.put("statistics", new Statistics().getAskMargeOne());
+        map.put("listStatistics", statisticService.listStatistics());
         return "bot";
     }
 
@@ -63,6 +68,13 @@ class CoinsController {
         BotManager botApplication = context.getBean(BotManager.class);
         botApplication.setContext(context);
         botApplication.orderCancel(id);
+        return "redirect:/bot";
+    }
+
+    @RequestMapping("/prices")
+    public String getPrice(Map<String, Object> map) {
+        map.put("statistics", new Statistics().getAskMargeOne());
+        map.put("listStatistics", statisticService.listStatistics());
         return "redirect:/bot";
     }
 

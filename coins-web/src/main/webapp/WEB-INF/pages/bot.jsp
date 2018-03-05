@@ -13,6 +13,34 @@
 
 <h2>Менеджер</h2>
 
+<h3>Последние цены</h3>
+<c:if test="${!empty listStatistics}">
+    <table class="data">
+        <tr>
+            <th>ASK цена на первой бирже</th>
+            <th>ASK цена на второй бирже</th>
+            <th>BID цена на первой бирже</th>
+            <th>BID цена на второй бирже</th>
+            <th>ASK маржа первая биржа</th>
+            <th>ASK маржа вторая биржа</th>
+            <th>BID маржа первая биржа</th>
+            <th>BID маржа вторая биржа</th>
+
+        </tr>
+        <c:forEach items="${listStatistics}" var="statistics">
+            <tr>
+                <td>${statistics.getFirstAskPrice()}</td>
+                <td>${statistics.getSecondAskPrice()}</td>
+                <td>${statistics.getFirstBidPrice()}</td>
+                <td>${statistics.getSecondBidPrice()}</td>
+                <td>${statistics.getAskMargeOne()}</td>
+                <td>${statistics.getAskMargeTwo()}</td>
+                <td>${statistics.getBidMargeOne()}</td>
+                <td>${statistics.getBidMargeTwo()}</td>
+            </tr>
+        </c:forEach>
+    </table>
+</c:if>
 
 <c:url var="logoutUrl" value="/logout" />
 <form action="${logoutUrl}" id="logout" method="post">

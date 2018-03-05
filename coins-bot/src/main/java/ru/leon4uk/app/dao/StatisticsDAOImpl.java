@@ -21,7 +21,7 @@ public class StatisticsDAOImpl implements StatisticsDAO{
     @Override
     @SuppressWarnings("unchecked")
     public List<Statistics> listStatistics() {
-        return sessionFactory.openSession().createQuery("from Statistics").list();
+        return sessionFactory.openSession().createQuery("from Statistics order by id desc").setMaxResults(20).list();
     }
 
     @Override
