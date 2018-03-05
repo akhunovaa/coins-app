@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import ru.leon4uk.app.bot.impl.ComplexCollector;
+import ru.leon4uk.app.bot.impl.buffer.BitsaneBuyOrderBuffer;
+import ru.leon4uk.app.bot.impl.buffer.BitsaneSellOrderBuffer;
 import ru.leon4uk.coins.service.ApiService;
 import ru.leon4uk.coins.service.binance.api.BinanceApi;
 import ru.leon4uk.coins.service.bitfinex.api.BitfinexApi;
@@ -12,6 +14,7 @@ import ru.leon4uk.coins.service.kraken.api.KrakenApi;
 import ru.leon4uk.coins.service.poloniex.api.PoloniexApi;
 import ru.leon4uk.coins.service.wex.api.WexApi;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -26,6 +29,7 @@ public class BotManager implements BotApplication{
     private Map<String, Future<?>> tasks = new HashMap<>();
 
     private ApplicationContext context;
+    private ApiService secondRialtoS;
 
     public BotManager() {
     }
@@ -35,7 +39,7 @@ public class BotManager implements BotApplication{
 
       ApiService firtRialtoS;
       ApiService firtRialtoHelpS;
-      ApiService secondRialtoS;
+
         try {
             firtRialtoS = getRialto(firstRialto);
             firtRialtoHelpS = getRialto(firstRialto);
@@ -59,6 +63,17 @@ public class BotManager implements BotApplication{
             logger.error("In bot application rialto entity not found");
         }
 
+    }
+
+    @Override
+    public void orderCancel(String orderId) {
+        try {
+            secondRialtoS.orderCancel(orderId);
+            context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
+            context.getBean(BitsaneSellOrderBuffer.class).setStatus(Boolean.FALSE);
+        } catch (IOException e) {
+            logger.error("Ошибка отмены ордера", e);
+        }
     }
 
     private ApiService getRialto(int rialto) throws Exception {
