@@ -106,14 +106,18 @@
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
             <version>${persistence.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>${telegram.version}</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>com.fasterxml.jackson.core</groupId>-->
             <!--<artifactId>jackson-databind</artifactId>-->

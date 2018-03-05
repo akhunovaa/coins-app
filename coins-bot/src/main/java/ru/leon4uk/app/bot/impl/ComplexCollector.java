@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import ru.leon4uk.app.bot.impl.buffer.BitsaneBuyOrderBuffer;
+import ru.leon4uk.app.bot.impl.buffer.BitsaneSellOrderBuffer;
 import ru.leon4uk.app.domain.Statistics;
 import ru.leon4uk.app.service.StatisticsService;
 import ru.leon4uk.coins.service.ApiService;
@@ -12,7 +14,9 @@ import ru.leon4uk.coins.service.ApiService;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
@@ -91,7 +95,7 @@ public class ComplexCollector implements Runnable{
 
             statisticsService.addStatistics(statistics);
 
-            if (margeAskTwo <= percentOne && margeAskTwo != -100 && !reverse){
+            if (margeAskTwo <= percentOne && margeAskTwo != -100 && (!context.getBean(BitsaneBuyOrderBuffer.class).isStatus() && !context.getBean(BitsaneSellOrderBuffer.class).isStatus()) && !reverse){
                 Buy buy = new Buy();
                 buy.setMarge(margeAskTwo);
                 buy.setMinAskPriceTwo(minAskPriceSecond);
@@ -104,7 +108,7 @@ public class ComplexCollector implements Runnable{
             }else {
                 logger.info("Failure <Bitsane> Buy <= " + " margeAskTwo: " + margeAskTwo + " percentOne: " + percentOne + " !reversetwo: " + reverse);
             }
-            if (margeABidTwo >= percentTwo && margeABidTwo != 100 && reverse){
+            if (margeABidTwo >= percentTwo && margeABidTwo != 100 && (!context.getBean(BitsaneBuyOrderBuffer.class).isStatus() && !context.getBean(BitsaneSellOrderBuffer.class).isStatus()) && reverse){
                 Sell sell = new Sell();
                 sell.setMarge(margeABidTwo);
                 sell.setMaxBidPriceTwo(maxBidPriceSecond);

@@ -12,6 +12,9 @@ import ru.leon4uk.coins.service.kraken.api.KrakenApi;
 import ru.leon4uk.coins.service.poloniex.api.PoloniexApi;
 import ru.leon4uk.coins.service.wex.api.WexApi;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class BotManager implements BotApplication{
 
     private final static Logger logger = Logger.getLogger(BotManager.class);
+    private Map<String, Future<?>> tasks = new HashMap<>();
 
     private ApplicationContext context;
 
@@ -49,8 +53,8 @@ public class BotManager implements BotApplication{
             complexCollector.setContext(context);
             complexCollector.setCurrencyPairId(currencyPairId);
             logger.info("Начинаем работу с биржами " + firstRialto + " " + secondRialto);
-            context.getBean(ScheduledExecutorService.class).scheduleAtFixedRate(complexCollector, 10, 10, TimeUnit.SECONDS);
-
+            Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleAtFixedRate(complexCollector, 10, 10, TimeUnit.SECONDS);
+            tasks.put(firstRialto + " " + secondRialto + " " + firstCurrencyPairOne + " " + firstCurrencyPairTwo + " " + secondCurrencyPair + " " + currencyPairId, periodicCollector);
         } catch (Exception e) {
             logger.error("In bot application rialto entity not found");
         }

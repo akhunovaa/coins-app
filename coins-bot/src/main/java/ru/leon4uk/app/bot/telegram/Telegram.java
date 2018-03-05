@@ -15,11 +15,11 @@ public class Telegram extends TelegramLongPollingBot {
     @Value("${telegram.bot.username}")
     private String userName;
 
-    @Value("${telegram.bot.token}")
+    @Value("527844587:AAGkYqISxP0gcNTAN3telufS5mr174C5E8Y")
     private String token;
 
-    @Value("${telegram.bot.chat.id}")
-    private long chatid;
+    @Value("-1001282888524")
+    private String chatid;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -47,10 +47,5 @@ public class Telegram extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        try {
-                this.execute(sendMessage);
-        } catch (TelegramApiException e) {
-                e.printStackTrace();
         }
-        }
-    }
+}
