@@ -98,6 +98,7 @@ public class ComplexCollector implements Runnable{
                 buy.setRialtoId(secondRialtoId);
                 buy.setPair(secondCurrencyPair);
                 buy.setRialto(secondRialto);
+                buy.setContext(context);
                 context.getBean(ScheduledExecutorService.class).execute(buy);
                 reverse = true;
             }else {
@@ -110,6 +111,7 @@ public class ComplexCollector implements Runnable{
                 sell.setRialtoId(secondRialtoId);
                 sell.setPair(secondCurrencyPair);
                 sell.setRialto(secondRialto);
+                sell.setContext(context);
                 context.getBean(ScheduledExecutorService.class).execute(sell);
                 reverse = false;
             }else {
