@@ -130,11 +130,7 @@
         <artifactId>jackson-databind</artifactId>
         <version>${jackson.version}</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.telegram</groupId>-->
-        <!--<artifactId>telegrambots</artifactId>-->
-        <!--<version>${telegram.version}</version>-->
-        <!--</dependency>-->
+
         <!--<dependency>-->
         <!--<groupId>com.fasterxml.jackson.core</groupId>-->
         <!--<artifactId>jackson-core</artifactId>-->
