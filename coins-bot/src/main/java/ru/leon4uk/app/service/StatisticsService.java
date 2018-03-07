@@ -11,4 +11,6 @@ public interface StatisticsService {
     List<Statistics> listStatistics();
 
     void removeStatistics(Integer id);
+
+    List<Statistics> listHourStatistics();
 }

@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class BotManager implements BotApplication{
 
     private final static Logger logger = Logger.getLogger(BotManager.class);
-    private Map<String, Future<?>> tasks = new HashMap<>();
+    private Map<String, ComplexCollector> tasks = new HashMap<>();
 
     private ApplicationContext context;
     private ApiService secondRialtoS;
@@ -58,12 +58,16 @@ public class BotManager implements BotApplication{
             complexCollector.setCurrencyPairId(currencyPairId);
             logger.info("Начинаем работу с биржами " + firstRialto + " " + secondRialto);
             Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleAtFixedRate(complexCollector, 10, 10, TimeUnit.SECONDS);
-            tasks.put(firstRialto + " " + secondRialto + " " + firstCurrencyPairOne + " " + firstCurrencyPairTwo + " " + secondCurrencyPair + " " + currencyPairId, periodicCollector);
+            complexCollector.setFuture(periodicCollector);
+            complexCollector.setFlag(Boolean.FALSE);
+            tasks.put(firstRialto + " " + secondRialto + " " + firstCurrencyPairOne + " " + firstCurrencyPairTwo + " " + secondCurrencyPair + " " + currencyPairId, complexCollector);
         } catch (Exception e) {
             logger.error("In bot application rialto entity not found");
         }
 
     }
+
+
 
     @Override
     public void orderCancel(String orderId) {
@@ -74,6 +78,21 @@ public class BotManager implements BotApplication{
         } catch (IOException e) {
             logger.error("Ошибка отмены ордера", e);
         }
+    }
+
+    @Override
+    public void botsStop() {
+           tasks.forEach((s, complexCollector) -> {
+               complexCollector.setFlag(Boolean.TRUE);
+               synchronized (complexCollector.getFuture()) {
+                   try {
+                       complexCollector.getFuture().wait();
+                   } catch (InterruptedException e) {
+                       logger.error("Ошибка при остановке бота", e);
+                   }
+           }
+        });
+
     }
 
     private ApiService getRialto(int rialto) throws Exception {

@@ -40,16 +40,38 @@ public class ComplexCollector implements Runnable{
     private String secondCurrencyPair;
     private int firstRialtoId;
     private int secondRialtoId;
+    private Boolean flag;
     private int currencyPairId;
+    private Future<?> future;
+
+    public Future<?> getFuture() {
+        return future;
+    }
+
+    public void setFuture(Future<?> future) {
+        this.future = future;
+    }
 
     public ComplexCollector() {
 
     }
 
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
     @Override
     public void run() {
-        try {
 
+            if (flag.equals(Boolean.TRUE)) {
+                this.getFuture().cancel(true);
+                this.getFuture().notify();
+            } else {
+                try {
             Statistics statistics = new Statistics();
 
             List<Double> firstAskPrices = firstRialto.getAskPrices(firstCurrencyPairOne).stream().map(Double::valueOf).collect(Collectors.toList());
@@ -129,6 +151,7 @@ public class ComplexCollector implements Runnable{
             } catch (InterruptedException e1) {
                 logger.error("Ошибка в запросе API",e);
             }
+        }
         }
 
     }

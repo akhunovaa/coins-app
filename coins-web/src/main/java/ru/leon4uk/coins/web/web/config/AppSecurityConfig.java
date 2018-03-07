@@ -22,7 +22,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/index*").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/bot").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/botadd*").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/bot/*").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/order/*").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/prices").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/delete/*").access("hasRole('ROLE_ADMIN')")

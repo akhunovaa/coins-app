@@ -55,11 +55,19 @@ class CoinsController {
         return "bot";
     }
 
-    @RequestMapping("/botadd")
+    @RequestMapping("/bot/add")
     public String botAdd() {
         BotManager botApplication = context.getBean(BotManager.class);
         botApplication.setContext(context);
         botApplication.newComplexCollectorExecuter(4, 6, "ltcusd", "xrpusd", "XRP_LTC", 232);
+        return "redirect:/bot";
+    }
+
+    @RequestMapping("/bot/stop")
+    public String botStop() {
+        BotManager botApplication = context.getBean(BotManager.class);
+        botApplication.setContext(context);
+        botApplication.botsStop();
         return "redirect:/bot";
     }
 
