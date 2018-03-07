@@ -12,6 +12,7 @@ import ru.leon4uk.app.bot.BotManager;
 import javax.annotation.Resource;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Configuration
 @ComponentScan({"ru.leon4uk.coins.web", "ru.leon4uk.app"})
@@ -42,19 +43,21 @@ public class AppConfig {
         return new JdbcTemplate(
                 dataSource());
     }
+//
+//    @Bean
+//    public ThreadPoolTaskExecutor taskExecutor() {
+//        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
+//        pool.setCorePoolSize(5);
+//        pool.setMaxPoolSize(10);
+//        pool.setWaitForTasksToCompleteOnShutdown(true);
+//        return pool;
+//    }
 
     @Bean
-    public ThreadPoolTaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
-        pool.setCorePoolSize(5);
-        pool.setMaxPoolSize(10);
-        pool.setWaitForTasksToCompleteOnShutdown(true);
-        return pool;
-    }
-
-    @Bean
-    public ScheduledExecutorService scheduledExecutorService() {
-        return Executors.newScheduledThreadPool(10);
+    public ScheduledThreadPoolExecutor scheduledExecutorService() {
+        ScheduledThreadPoolExecutor sch = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(1);
+        sch.setRemoveOnCancelPolicy(true);
+        return sch;
     }
 
     @Bean

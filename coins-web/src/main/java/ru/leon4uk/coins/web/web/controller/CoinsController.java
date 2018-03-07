@@ -3,10 +3,7 @@ package ru.leon4uk.coins.web.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import ru.leon4uk.app.bot.BotManager;
 import ru.leon4uk.app.domain.Statistics;
 import ru.leon4uk.app.service.CurrencyPairService;
@@ -79,10 +76,29 @@ class CoinsController {
         return "redirect:/bot";
     }
 
+    @RequestMapping(value = "/bot/params", params = { "min", "max"})
+    public String borParamsChange(Map<String, Object> map, @RequestParam("min") Double min, @RequestParam("max") Double max) {
+        BotManager botApplication = context.getBean(BotManager.class);
+        botApplication.setContext(context);
+        botApplication.paramsEdit(min, max);
+        map.put("paramMin", min);
+        map.put("paramMax", max);
+        return "redirect:/bot";
+    }
+
     @RequestMapping("/prices")
     public String getPrice(Map<String, Object> map) {
         map.put("statistics", new Statistics().getAskMargeOne());
         map.put("listStatistics", statisticService.listStatistics());
+        return "redirect:/bot";
+    }
+
+    @RequestMapping("/order/{id}/info")
+    public String getOrderInfo(@PathVariable String id, Map<String, Object> map) {
+        BotManager botApplication = context.getBean(BotManager.class);
+        botApplication.setContext(context);
+        String orderInfo = botApplication.orderInfo(id);
+        map.put("orderInfo", orderInfo);
         return "redirect:/bot";
     }
 
