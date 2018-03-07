@@ -46,13 +46,15 @@
 
 <b>
     Order information:
-    ${orderInfo}
+    <br>
 </b>
 <br>
 <b>
     Params information:
-    Param min : ${paramMin}
-    Param max : ${paramMax}
+    <br>
+    Param min : ${min}
+    <br>
+    Param max : ${max}
 </b>
 
 
