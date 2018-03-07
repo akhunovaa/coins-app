@@ -2,6 +2,7 @@ package ru.leon4uk.app.domain;
 
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "statistic_info")
@@ -56,6 +57,9 @@ public class Statistics {
 
     @Column(name = "currency_pair_id")
     private Integer currencyPairId;
+
+    @Column(name = "create_time")
+    private Timestamp createTime;
 
     public Integer getId() {
         return id;
@@ -183,5 +187,13 @@ public class Statistics {
 
     public void setCurrencyPairId(Integer currencyPairId) {
         this.currencyPairId = currencyPairId;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
     }
 }

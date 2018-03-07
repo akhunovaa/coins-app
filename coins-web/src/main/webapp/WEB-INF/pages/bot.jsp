@@ -17,6 +17,7 @@
 <c:if test="${!empty listStatistics}">
     <table class="data">
         <tr>
+            <th>Время</th>
             <th>ASK цена на первой бирже</th>
             <th>ASK цена на второй бирже</th>
             <th>BID цена на первой бирже</th>
@@ -29,6 +30,7 @@
         </tr>
         <c:forEach items="${listStatistics}" var="statistics">
             <tr>
+                <td>${statistics.getCreateTime()}</td>
                 <td>${statistics.getFirstAskPrice()}</td>
                 <td>${statistics.getSecondAskPrice()}</td>
                 <td>${statistics.getFirstBidPrice()}</td>

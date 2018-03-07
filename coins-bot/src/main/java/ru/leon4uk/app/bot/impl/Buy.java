@@ -87,8 +87,9 @@ public class Buy implements Runnable {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("<b>").append(dateFormat.format(date)).append("</b>").append("\n");
-            stringBuilder.append(rialtoId).append("\n");
-            stringBuilder.append("<b>Ордер не исполнился: </b>BUY").append("\n");
+            stringBuilder.append("<b>Биржа: </b>").append(rialtoId).append("\n");
+            stringBuilder.append("<b>Ордер не исполнился</b>").append("\n");
+            stringBuilder.append("<b>Тип операции: </b>BUY").append("\n");
             stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
             stringBuilder.append("<b>PAIR: </b>").append(bitsaneOrder.getPair()).append("\n");
             stringBuilder.append("<b>executed_amount: </b>").append(bitsaneOrder.getExecutedAmount()).append("\n");
@@ -105,7 +106,11 @@ public class Buy implements Runnable {
             stringBuilder.append("<b>Тип операции: </b>BUY").append("\n");
             stringBuilder.append("<b>Цена: </b>").append(buyPrice).append("\n");
             stringBuilder.append("<b>Ордер: </b>").append(buyAmount).append("\n");
-            stringBuilder.append("<b>Разница: </b>").append(new DecimalFormat("#.#####").format(marge)).append("/").append("\n");
+            stringBuilder.append("<b>Разница: </b>").append(new DecimalFormat("#.#####").format(marge)).append("\n");
+            if (bitsaneOrder != null)
+                stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
+            else
+                stringBuilder.append("<b>ID: </b>").append("order_id error").append("\n");
             context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
             context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
         }

@@ -109,6 +109,10 @@ public class Sell implements Runnable {
             stringBuilder.append("<b>Цена: </b>").append(sellPrice).append("\n");
             stringBuilder.append("<b>Ордер: </b>").append(sellAmount).append("\n");
             stringBuilder.append("<b>Разница: </b>").append(new DecimalFormat("#.#####").format(marge)).append("/").append("\n");
+            if (bitsaneOrder != null)
+                stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
+            else
+                stringBuilder.append("<b>ID: </b>").append("order_id error").append("\n");
             context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
             context.getBean(BitsaneSellOrderBuffer.class).setStatus(Boolean.FALSE);
         }

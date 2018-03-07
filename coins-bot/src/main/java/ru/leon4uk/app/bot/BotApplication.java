@@ -8,4 +8,6 @@ public interface BotApplication {
 
     void orderCancel(String orderId);
 
+    void botsStop();
+
 }

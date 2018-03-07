@@ -25,6 +25,12 @@ public class StatisticsDAOImpl implements StatisticsDAO{
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public List<Statistics> listHourStatistics() {
+        return sessionFactory.openSession().createQuery("from Statistics where create_time BETWEEN current_timestamp - HOUR('1') and current_timestamp and first_rialto_id = 4 and second_rialto_id = 6 GROUP BY 1 order by 1").setMaxResults(500).list();
+    }
+
+    @Override
     public void removeStatistics(Integer id) {
         Statistics statistics = (Statistics) sessionFactory.getCurrentSession().load(Statistics.class, id);
         if (null != statistics) {

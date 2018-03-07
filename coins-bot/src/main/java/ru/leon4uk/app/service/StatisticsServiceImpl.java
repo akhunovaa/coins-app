@@ -28,4 +28,9 @@ public class StatisticsServiceImpl implements StatisticsService{
         statisticsDAO.removeStatistics(id);
     }
 
+    @Override
+    public List<Statistics> listHourStatistics() {
+        return statisticsDAO.listHourStatistics();
+    }
+
 }
