@@ -58,7 +58,7 @@ public class BotManager implements BotApplication{
             complexCollector.setContext(context);
             complexCollector.setCurrencyPairId(currencyPairId);
             logger.info("Начинаем работу с биржами " + firstRialto + " " + secondRialto);
-            Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleAtFixedRate(complexCollector, 10, 10, TimeUnit.SECONDS);
+            Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(complexCollector, 10, 10, TimeUnit.SECONDS);
             complexCollector.setFuture(periodicCollector);
             complexCollector.setFlag(Boolean.FALSE);
             tasks.put(firstRialto + " " + secondRialto + " " + firstCurrencyPairOne + " " + firstCurrencyPairTwo + " " + secondCurrencyPair + " " + currencyPairId, complexCollector);
@@ -114,6 +114,7 @@ public class BotManager implements BotApplication{
     @Override
     public void botsStop() {
            tasks.forEach((s, complexCollector) -> {
+               logger.info("stop!");
                complexCollector.setFlag(Boolean.TRUE);
                synchronized (complexCollector.getFuture()) {
                    try {

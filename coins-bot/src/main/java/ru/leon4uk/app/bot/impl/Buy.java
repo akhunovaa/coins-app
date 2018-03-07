@@ -42,10 +42,13 @@ public class Buy implements Runnable {
         double balance = 0.0;
         double buyPrice = minAskPriceTwo;
         double buyAmount = 0;
+        String response = null;
         try {
             balance = Double.valueOf(rialto.getBitsaneBalance("LTC"));
             buyAmount = balance / buyPrice;
-            rialto.newOrder(pair, buyAmount, buyPrice, "buy");
+            buyAmount = Math.round(buyAmount*100000)/100000.0;
+            response = rialto.newOrder(pair, buyAmount, buyPrice, "buy");
+            logger.info("Response message \n" + response);
         } catch (IOException e) {
             logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
         }
@@ -113,6 +116,11 @@ public class Buy implements Runnable {
                 stringBuilder.append("<b>ID: </b>").append("order_id error").append("\n");
             context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
             context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
+        }
+
+        synchronized (this) {
+            this.notify();
+            logger.info("Thread Buy notify!");
         }
     }
 
