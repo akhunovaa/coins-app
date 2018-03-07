@@ -14,4 +14,6 @@ public interface BotApplication {
 
     void botsStop();
 
+    String[] getParams();
+
 }

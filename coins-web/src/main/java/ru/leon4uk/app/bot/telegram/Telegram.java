@@ -1,7 +1,6 @@
 package ru.leon4uk.app.bot.telegram;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
@@ -9,10 +8,9 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 @Component
-@PropertySource("classpath:bot.properties")
 public class Telegram extends TelegramLongPollingBot {
 
-    @Value("${telegram.bot.username}")
+    @Value("bot")
     private String userName;
 
     @Value("527844587:AAGkYqISxP0gcNTAN3telufS5mr174C5E8Y")

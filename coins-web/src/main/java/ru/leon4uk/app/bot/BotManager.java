@@ -129,6 +129,16 @@ public class BotManager implements BotApplication{
 
     }
 
+    @Override
+    public String[] getParams() {
+        String[] params = new String[2];
+        tasks.forEach((s, complexCollector) -> {
+            params[0] = String.valueOf(complexCollector.getPercentOne());
+            params[1] = String.valueOf(complexCollector.getPercentTwo());
+        });
+        return params;
+    }
+
     private ApiService getRialto(int rialto) throws Exception {
         switch (rialto){
             case 2:
