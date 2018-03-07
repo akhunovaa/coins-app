@@ -10,6 +10,7 @@ import ru.leon4uk.coins.service.ApiService;
 import ru.leon4uk.coins.service.binance.api.BinanceApi;
 import ru.leon4uk.coins.service.bitfinex.api.BitfinexApi;
 import ru.leon4uk.coins.service.bitsane.api.BitsaneApi;
+import ru.leon4uk.coins.service.bitsane.entity.BitsaneOrder;
 import ru.leon4uk.coins.service.kraken.api.KrakenApi;
 import ru.leon4uk.coins.service.poloniex.api.PoloniexApi;
 import ru.leon4uk.coins.service.wex.api.WexApi;
@@ -68,7 +69,6 @@ public class BotManager implements BotApplication{
     }
 
 
-
     @Override
     public void orderCancel(String orderId) {
         try {
@@ -81,12 +81,45 @@ public class BotManager implements BotApplication{
     }
 
     @Override
+    public String orderInfo(String orderId) {
+        BitsaneOrder bitsaneOrder = null;
+        try {
+            bitsaneOrder = secondRialtoS.getBitsaneOrder(orderId);
+        } catch (IOException e) {
+            logger.error("Ошибка при запросе на инфо ордера", e);
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if (bitsaneOrder != null){
+            stringBuilder.append("ID: ").append(bitsaneOrder.getId()).append("\n");
+            stringBuilder.append("Pair: ").append(bitsaneOrder.getPair()).append("\n");
+            stringBuilder.append("Price: ").append(bitsaneOrder.getPrice()).append("\n");
+            stringBuilder.append("Price: ").append(bitsaneOrder.getSide()).append("\n");
+            stringBuilder.append("Executed price: ").append(bitsaneOrder.getExecutedPrice()).append("\n");
+            stringBuilder.append("Remaining amount: ").append(bitsaneOrder.getRemainingAmount()).append("\n");
+            stringBuilder.append("Executed amount: ").append(bitsaneOrder.getExecutedAmount()).append("\n");
+            stringBuilder.append("Original amount: ").append(bitsaneOrder.getOriginalAmount()).append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public void paramsEdit(Double min, Double max) {
+        tasks.forEach((s, complexCollector) -> {
+            complexCollector.setPercentOne(min);
+            complexCollector.setPercentTwo(max);
+        });
+    }
+
+    @Override
     public void botsStop() {
            tasks.forEach((s, complexCollector) -> {
                complexCollector.setFlag(Boolean.TRUE);
                synchronized (complexCollector.getFuture()) {
                    try {
                        complexCollector.getFuture().wait();
+                       logger.info("waited!");
+                       tasks.remove(complexCollector);
                    } catch (InterruptedException e) {
                        logger.error("Ошибка при остановке бота", e);
                    }

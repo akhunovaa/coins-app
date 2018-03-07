@@ -44,6 +44,18 @@
     </table>
 </c:if>
 
+<b>
+    Order information:
+    ${orderInfo}
+</b>
+<br>
+<b>
+    Params information:
+    Param min : ${paramMin}
+    Param max : ${paramMax}
+</b>
+
+
 <c:url var="logoutUrl" value="/logout" />
 <form action="${logoutUrl}" id="logout" method="post">
     <input type="hidden" name="${_csrf.parameterName}"

@@ -44,11 +44,11 @@ public class ComplexCollector implements Runnable{
     private int currencyPairId;
     private Future<?> future;
 
-    public Future<?> getFuture() {
+    public synchronized Future<?>  getFuture() {
         return future;
     }
 
-    public void setFuture(Future<?> future) {
+    public synchronized void setFuture(Future<?> future) {
         this.future = future;
     }
 
@@ -56,20 +56,16 @@ public class ComplexCollector implements Runnable{
 
     }
 
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
-
     @Override
     public void run() {
 
-            if (flag.equals(Boolean.TRUE)) {
-                this.getFuture().cancel(true);
-                this.getFuture().notify();
+            if (this.isFlag().equals(Boolean.TRUE)) {
+                synchronized (this.getFuture()) {
+                    logger.info("make notify!");
+                    this.getFuture().cancel(true);
+                    this.getFuture().notifyAll();
+                    logger.info("notified!");
+                }
             } else {
                 try {
             Statistics statistics = new Statistics();
@@ -146,11 +142,6 @@ public class ComplexCollector implements Runnable{
 
         } catch (IOException e) {
             logger.error("Ошибка в запросе API",e);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                logger.error("Ошибка в запросе API",e);
-            }
         }
         }
 
@@ -250,5 +241,13 @@ public class ComplexCollector implements Runnable{
 
     public void setContext(ApplicationContext context) {
         this.context = context;
+    }
+
+    public synchronized Boolean isFlag() {
+        return flag;
+    }
+
+    public synchronized void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }
