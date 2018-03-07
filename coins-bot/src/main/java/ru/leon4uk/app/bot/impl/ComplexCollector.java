@@ -110,10 +110,9 @@ public class ComplexCollector implements Runnable{
             statistics.setFirstRialtoId(firstRialtoId);
             statistics.setSecondRialtoId(secondRialtoId);
             statistics.setCurrencyPairId(currencyPairId);
-
             statisticsService.addStatistics(statistics);
 
-            if (margeAskTwo <= percentOne && margeAskTwo != -100 && (!context.getBean(BitsaneBuyOrderBuffer.class).isStatus() && !context.getBean(BitsaneSellOrderBuffer.class).isStatus()) && !reverse){
+            if (margeAskTwo <= getPercentOne() && margeAskTwo != -100 && (!context.getBean(BitsaneBuyOrderBuffer.class).isStatus() && !context.getBean(BitsaneSellOrderBuffer.class).isStatus()) && !reverse){
                 Buy buy = new Buy();
                 buy.setMarge(margeAskTwo);
                 buy.setMinAskPriceTwo(minAskPriceSecond);
@@ -121,12 +120,23 @@ public class ComplexCollector implements Runnable{
                 buy.setPair(secondCurrencyPair);
                 buy.setRialto(secondRialto);
                 buy.setContext(context);
-                context.getBean(ScheduledExecutorService.class).execute(buy);
+                Thread tBuyer = new Thread(buy, "buyer");
+                tBuyer.start();
+                try {
+                    synchronized (tBuyer) {
+                        logger.info("Thread Buy wait!");
+                        tBuyer.wait();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                logger.info("Thread Buy waited!");
+//                context.getBean(ScheduledExecutorService.class).execute(buy);
                 reverse = true;
             }else {
-                logger.info("Failure <Bitsane> Buy <= " + " margeAskTwo: " + margeAskTwo + " percentOne: " + percentOne + " !reversetwo: " + reverse);
+                logger.info("Failure <Bitsane> Buy <= " + " margeAskTwo: " + margeAskTwo + " percentOne: " + getPercentOne() + " !reversetwo: " + reverse);
             }
-            if (margeABidTwo >= percentTwo && margeABidTwo != 100 && (!context.getBean(BitsaneBuyOrderBuffer.class).isStatus() && !context.getBean(BitsaneSellOrderBuffer.class).isStatus()) && reverse){
+            if (margeABidTwo >= getPercentTwo() && margeABidTwo != 100 && (!context.getBean(BitsaneBuyOrderBuffer.class).isStatus() && !context.getBean(BitsaneSellOrderBuffer.class).isStatus()) && reverse){
                 Sell sell = new Sell();
                 sell.setMarge(margeABidTwo);
                 sell.setMaxBidPriceTwo(maxBidPriceSecond);
@@ -134,10 +144,23 @@ public class ComplexCollector implements Runnable{
                 sell.setPair(secondCurrencyPair);
                 sell.setRialto(secondRialto);
                 sell.setContext(context);
-                context.getBean(ScheduledExecutorService.class).execute(sell);
+
+                Thread tSeller = new Thread(sell, "seller");
+                tSeller.start();
+                try {
+                    synchronized (tSeller) {
+                        logger.info("Thread Sell wait!");
+                        tSeller.wait();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                logger.info("Thread Sell waited!");
+
+//                context.getBean(ScheduledExecutorService.class).execute(sell);
                 reverse = false;
             }else {
-                logger.info("Failure <Bitsane> Sell >= " + " margeABidTwo: " + margeABidTwo + " percentTwo: " + percentTwo + " reversetwo: " + reverse);
+                logger.info("Failure <Bitsane> Sell >= " + " margeABidTwo: " + margeABidTwo + " percentTwo: " + getPercentTwo() + " reversetwo: " + reverse);
             }
 
         } catch (IOException e) {
@@ -195,19 +218,19 @@ public class ComplexCollector implements Runnable{
         this.secondCurrencyPair = secondCurrencyPair;
     }
 
-    public double getPercentOne() {
+    public synchronized double getPercentOne() {
         return percentOne;
     }
 
-    public void setPercentOne(double percentOne) {
+    public synchronized void setPercentOne(double percentOne) {
         this.percentOne = percentOne;
     }
 
-    public double getPercentTwo() {
+    public synchronized double getPercentTwo() {
         return percentTwo;
     }
 
-    public void setPercentTwo(double percentTwo) {
+    public synchronized void setPercentTwo(double percentTwo) {
         this.percentTwo = percentTwo;
     }
 

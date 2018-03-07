@@ -41,10 +41,15 @@ public class Sell implements Runnable {
         double balance = 0.0;
         double sellAmount = 0;
         double sellPrice = maxBidPriceTwo;
+        String response = null;
+
         try {
             balance = Double.valueOf(rialto.getBitsaneBalance("XRP"));
-            sellAmount = balance * sellPrice;
-            rialto.newOrder(pair, sellAmount, sellPrice, "sell");
+            sellAmount = balance;
+//            sellAmount = Math.round(sellAmount*100000)/100000.0;
+
+            response = rialto.newOrder(pair, sellAmount, sellPrice, "sell");
+            logger.info("Response message \n" + response);
         } catch (IOException e) {
             logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
         }
@@ -108,13 +113,18 @@ public class Sell implements Runnable {
             stringBuilder.append("<b>Тип операции: </b>SELL").append("\n");
             stringBuilder.append("<b>Цена: </b>").append(sellPrice).append("\n");
             stringBuilder.append("<b>Ордер: </b>").append(sellAmount).append("\n");
-            stringBuilder.append("<b>Разница: </b>").append(new DecimalFormat("#.#####").format(marge)).append("/").append("\n");
+            stringBuilder.append("<b>Разница: </b>").append(new DecimalFormat("#.#####").format(marge)).append("\n");
             if (bitsaneOrder != null)
                 stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
             else
                 stringBuilder.append("<b>ID: </b>").append("order_id error").append("\n");
             context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
             context.getBean(BitsaneSellOrderBuffer.class).setStatus(Boolean.FALSE);
+        }
+
+        synchronized (this) {
+            this.notify();
+            logger.info("Thread Buy notify!");
         }
     }
 
