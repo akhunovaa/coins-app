@@ -273,4 +273,12 @@ public class ComplexCollector implements Runnable{
     public synchronized void setFlag(boolean flag) {
         this.flag = flag;
     }
+
+    public boolean isReverse() {
+        return reverse;
+    }
+
+    public void setReverse(boolean reverse) {
+        this.reverse = reverse;
+    }
 }
