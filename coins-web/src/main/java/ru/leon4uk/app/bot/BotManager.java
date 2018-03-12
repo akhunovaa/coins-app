@@ -75,6 +75,9 @@ public class BotManager implements BotApplication{
             secondRialtoS.orderCancel(orderId);
             context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
             context.getBean(BitsaneSellOrderBuffer.class).setStatus(Boolean.FALSE);
+            tasks.forEach((s, complexCollector) -> {
+                complexCollector.setReverse(Boolean.TRUE);
+            });
         } catch (IOException e) {
             logger.error("Ошибка отмены ордера", e);
         }
