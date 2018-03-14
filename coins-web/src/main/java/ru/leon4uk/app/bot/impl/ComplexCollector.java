@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneBuyOrderBuffer;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneSellOrderBuffer;
+import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.app.domain.Statistics;
 import ru.leon4uk.app.service.StatisticsService;
 import ru.leon4uk.coins.service.ApiService;
@@ -30,7 +31,7 @@ public class ComplexCollector implements Runnable{
 
     private boolean reverse;
     private final static Logger logger = Logger.getLogger(ComplexCollector.class);
-    private double percentOne = -1.5;
+    private double percentOne = -0.9;
     private double percentTwo = 1.5;
     private ApiService firstRialto;
     private ApiService firstRialtoHelp;
@@ -164,9 +165,21 @@ public class ComplexCollector implements Runnable{
             }
 
         } catch (IOException e) {
-            logger.error("Ошибка в запросе API",e);
+                    logger.error("Ошибка в запросе API", e);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Ошибка в запросе API").append("\n");
+                    stringBuilder.append(e.getMessage()).append("\n");
+                    stringBuilder.append(e.getLocalizedMessage()).append("\n");
+                    context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+        }catch (Exception e) {
+                    logger.error("Неизвестная ошибка в потоке", e);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Неизвестная ошибка в потоке").append("\n");
+                    stringBuilder.append(e.getMessage()).append("\n");
+                    stringBuilder.append(e.getLocalizedMessage()).append("\n");
+                    context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
         }
-        }
+            }
 
     }
 

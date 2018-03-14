@@ -73,7 +73,7 @@ public class Buy implements Runnable {
             }
         }
         try {
-            Thread.sleep(60000);
+            Thread.sleep(300000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -114,8 +114,8 @@ public class Buy implements Runnable {
                 stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
             else
                 stringBuilder.append("<b>ID: </b>").append("order_id error").append("\n");
-            context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
-            context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
+           context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+           context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
         }
 
         synchronized (this) {

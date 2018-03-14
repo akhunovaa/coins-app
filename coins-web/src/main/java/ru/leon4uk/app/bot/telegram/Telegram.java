@@ -16,7 +16,7 @@ public class Telegram extends TelegramLongPollingBot {
     @Value("527844587:AAGkYqISxP0gcNTAN3telufS5mr174C5E8Y")
     private String token;
 
-    @Value("-1001282888524")
+    @Value("-312925012")
     private String chatid;
 
     @Override
