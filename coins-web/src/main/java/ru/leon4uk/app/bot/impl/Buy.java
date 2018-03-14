@@ -107,7 +107,7 @@ public class Buy implements Runnable {
             if (bitsaneOrder != null)
                 stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
             else
-                stringBuilder.append("<b>ID: </b>").append("order_id error").append("\n");
+                stringBuilder.append("<b>ID: </b>").append(response).append("\n");
            context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
            context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
         }
