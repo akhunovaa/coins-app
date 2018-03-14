@@ -47,7 +47,6 @@ public class Sell implements Runnable {
             balance = Double.valueOf(rialto.getBitsaneBalance("XRP"));
             sellAmount = balance;
 //            sellAmount = Math.round(sellAmount*100000)/100000.0;
-
             response = rialto.newOrder(pair, sellAmount, sellPrice, "sell");
             logger.info("Response message \n" + response);
         } catch (IOException e) {
@@ -113,7 +112,7 @@ public class Sell implements Runnable {
             if (bitsaneOrder != null)
                 stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
             else
-                stringBuilder.append("<b>ID: </b>").append("order_id error").append("\n");
+                stringBuilder.append("<b>ID: </b>").append(response).append("\n");
             context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
             context.getBean(BitsaneSellOrderBuffer.class).setStatus(Boolean.FALSE);
         }
