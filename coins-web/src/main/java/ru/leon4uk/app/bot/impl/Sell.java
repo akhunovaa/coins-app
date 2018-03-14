@@ -96,24 +96,20 @@ public class Sell implements Runnable {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("<b>").append(dateFormat.format(date)).append("</b>").append("\n");
             stringBuilder.append(rialtoId).append("\n");
-            stringBuilder.append("<b>Ордер не исполнился: </b>SELL").append("\n");
+            stringBuilder.append("<b>[FAILED SELL ORDER]</b>").append("\n");
             stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
             stringBuilder.append("<b>PAIR: </b>").append(bitsaneOrder.getPair()).append("\n");
+            stringBuilder.append("<b>PRICE: </b>").append(bitsaneOrder.getPrice()).append("\n");
             stringBuilder.append("<b>executed_amount: </b>").append(bitsaneOrder.getExecutedAmount()).append("\n");
             stringBuilder.append("<b>remaining_amount: </b>").append(bitsaneOrder.getRemainingAmount()).append("\n");
             stringBuilder.append("<b>original_amount: </b>").append(bitsaneOrder.getOriginalAmount()).append("\n");
             context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
         }else {
             logger.info("SOLD: MARGE-" + marge + " PRICE-" + maxBidPriceTwo + " PAIR-" + pair + "CURRENCY_SELL-" + "LTC");
-            Date date = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("<b>").append(dateFormat.format(date)).append("</b>").append("\n");
-            stringBuilder.append(rialtoId).append("\n");
-            stringBuilder.append("<b>Тип операции: </b>SELL").append("\n");
-            stringBuilder.append("<b>Цена: </b>").append(sellPrice).append("\n");
-            stringBuilder.append("<b>Ордер: </b>").append(sellAmount).append("\n");
-            stringBuilder.append("<b>Разница: </b>").append(new DecimalFormat("#.#####").format(marge)).append("\n");
+            stringBuilder.append("<b>[CREATE ORDER SELL]</b>").append("\n");
+            stringBuilder.append("<b>QTY: </b>").append(sellAmount).append(" [").append(pair).append("] ").append(" (").append(sellPrice).append(") ").append(" [").append(maxBidPriceTwo).append("] ").append("\n");
+            stringBuilder.append("<b>Diff: </b>").append(new DecimalFormat("#.#####").format(marge)).append("\n");
             if (bitsaneOrder != null)
                 stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
             else
