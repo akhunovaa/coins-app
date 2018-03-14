@@ -16,4 +16,6 @@ public interface BotApplication {
 
     String[] getParams();
 
+    void setReverse(Boolean state);
+
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.leon4uk.app.bot.impl.ComplexCollector;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneBuyOrderBuffer;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneSellOrderBuffer;
+import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.coins.service.ApiService;
 import ru.leon4uk.coins.service.binance.api.BinanceApi;
 import ru.leon4uk.coins.service.bitfinex.api.BitfinexApi;
@@ -75,9 +76,6 @@ public class BotManager implements BotApplication{
             secondRialtoS.orderCancel(orderId);
             context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
             context.getBean(BitsaneSellOrderBuffer.class).setStatus(Boolean.FALSE);
-            tasks.forEach((s, complexCollector) -> {
-                complexCollector.setReverse(Boolean.TRUE);
-            });
         } catch (IOException e) {
             logger.error("Ошибка отмены ордера", e);
         }
@@ -97,11 +95,12 @@ public class BotManager implements BotApplication{
             stringBuilder.append("ID: ").append(bitsaneOrder.getId()).append("\n");
             stringBuilder.append("Pair: ").append(bitsaneOrder.getPair()).append("\n");
             stringBuilder.append("Price: ").append(bitsaneOrder.getPrice()).append("\n");
-            stringBuilder.append("Price: ").append(bitsaneOrder.getSide()).append("\n");
+            stringBuilder.append("Side: ").append(bitsaneOrder.getSide()).append("\n");
             stringBuilder.append("Executed price: ").append(bitsaneOrder.getExecutedPrice()).append("\n");
             stringBuilder.append("Remaining amount: ").append(bitsaneOrder.getRemainingAmount()).append("\n");
             stringBuilder.append("Executed amount: ").append(bitsaneOrder.getExecutedAmount()).append("\n");
             stringBuilder.append("Original amount: ").append(bitsaneOrder.getOriginalAmount()).append("\n");
+            context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
         }
         return stringBuilder.toString();
     }
@@ -140,6 +139,13 @@ public class BotManager implements BotApplication{
             params[1] = String.valueOf(complexCollector.getPercentTwo());
         });
         return params;
+    }
+
+    @Override
+    public void setReverse(Boolean state) {
+        tasks.forEach((s, complexCollector) -> {
+            complexCollector.setReverse(state);
+        });
     }
 
     private ApiService getRialto(int rialto) throws Exception {

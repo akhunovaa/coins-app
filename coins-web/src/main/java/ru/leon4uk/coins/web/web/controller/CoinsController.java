@@ -105,6 +105,14 @@ class CoinsController {
         return "redirect:/bot";
     }
 
+    @RequestMapping(value = "/bot/state", params = {"reverse"})
+    public String getOrderInfo(@RequestParam("reverse") String reverse) {
+        BotManager botApplication = context.getBean(BotManager.class);
+        botApplication.setContext(context);
+        botApplication.setReverse(Boolean.parseBoolean(reverse));
+        return "redirect:/bot";
+    }
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
