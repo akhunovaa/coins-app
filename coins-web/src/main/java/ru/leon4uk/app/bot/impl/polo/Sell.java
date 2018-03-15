@@ -31,8 +31,8 @@ public class Sell implements Runnable {
     public void run() {
         logger.info("SELL: MARGE-" + marge + " PRICE-" + maxBidPrice + " PAIR-" + pair + "CURRENCY_SELL-" + "LTC");
         double balance = 0.0;
-        double sellAmount = 0;
         double sellPrice = maxBidPrice;
+        double sellAmount = 0;
         PoloniexOrder poloniexOrder = null;
 
         try {
