@@ -12,6 +12,7 @@ import ru.leon4uk.app.service.StatisticsService;
 import ru.leon4uk.coins.web.domain.User;
 import ru.leon4uk.coins.web.service.UserService;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Controller
@@ -117,6 +118,13 @@ class CoinsController {
     public String addUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
         return "redirect:/index";
+    }
+
+    @RequestMapping(value = "/bot/polo/add")
+    public String addUser() throws IOException {
+        BotManager botApplication = context.getBean(BotManager.class);
+        botApplication.poloExecutor();
+        return "redirect:/bot";
     }
 
     @RequestMapping("/delete/{userId}")

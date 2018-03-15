@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import ru.leon4uk.app.bot.impl.ComplexCollector;
+import ru.leon4uk.app.bot.impl.PoloExecutor;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneBuyOrderBuffer;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneSellOrderBuffer;
 import ru.leon4uk.app.bot.telegram.Telegram;
@@ -29,6 +30,7 @@ public class BotManager implements BotApplication{
 
     private final static Logger logger = Logger.getLogger(BotManager.class);
     private Map<String, ComplexCollector> tasks = new HashMap<>();
+    private Map<String, PoloExecutor> polo = new HashMap<>();
 
     private ApplicationContext context;
     private ApiService secondRialtoS;
@@ -148,10 +150,30 @@ public class BotManager implements BotApplication{
         });
     }
 
+    @Override
+    public void poloExecutor() {
+        ApiService rialtoPolo =  new PoloniexApi("https://poloniex.com/public?command=", "H3VEQ34R-UH7P93MY-O6S6F1AO-L8K9P8QX", "c7a6891dc9659a700084788a3bd983a5ade3643126d767d091bf804a966d3a2c83735930738f2afb3eac9ec71b5b0bfd35d05713f6a63dc608ea82beda3a23ac");
+        ApiService rialtoBinance =  new BinanceApi("https://www.binance.com/api/v1/");
+        PoloExecutor poloExecutor = context.getBean(PoloExecutor.class);
+        poloExecutor.setFirstRialto(rialtoPolo);
+        poloExecutor.setSecondRialto(rialtoBinance);
+        poloExecutor.setFirstCurrencyPairOne("ltc_usd");
+        poloExecutor.setSecondCurrencyPair("LTCUSDT");
+        poloExecutor.setFirstRialtoId(2);
+        poloExecutor.setSecondRialtoId(5);
+        poloExecutor.setContext(context);
+        poloExecutor.setCurrencyPairId(5);
+        logger.info("Начинаем работу с биржами " + "Poloniex" + " " + "Binance");
+        Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(poloExecutor, 10, 10, TimeUnit.SECONDS);
+        poloExecutor.setFuture(periodicCollector);
+        poloExecutor.setFlag(Boolean.FALSE);
+        polo.put("Poloniex", poloExecutor);
+    }
+
     private ApiService getRialto(int rialto) throws Exception {
         switch (rialto){
             case 2:
-                return new PoloniexApi("https://poloniex.com/public?command=");
+                return new PoloniexApi("https://poloniex.com/public?command=", "H3VEQ34R-UH7P93MY-O6S6F1AO-L8K9P8QX", "c7a6891dc9659a700084788a3bd983a5ade3643126d767d091bf804a966d3a2c83735930738f2afb3eac9ec71b5b0bfd35d05713f6a63dc608ea82beda3a23ac");
             case 1:
                 return new WexApi("https://wex.nz/api/3/");
             case 5:
@@ -160,8 +182,8 @@ public class BotManager implements BotApplication{
                 return new KrakenApi("https://api.kraken.com/0/");
             case 4:
                 return new BitfinexApi("https://api.bitfinex.com/v1/");
-            case 6:
-                return new BitsaneApi("https://bitsane.com", "77F3CFEE9C4462EB987053FB8B467686831C252D3B86A22FA6850193303C91B9", "E290A9111A88C83A93E4AB6FDC6DE37CE98D24CCE765890CDD0EF3F881475AE6");
+//            case 6:
+//                return new BitsaneApi("https://bitsane.com", "77F3CFEE9C4462EB987053FB8B467686831C252D3B86A22FA6850193303C91B9", "E290A9111A88C83A93E4AB6FDC6DE37CE98D24CCE765890CDD0EF3F881475AE6");
             default:
                 throw new Exception("rialto not found: " + rialto);
         }
