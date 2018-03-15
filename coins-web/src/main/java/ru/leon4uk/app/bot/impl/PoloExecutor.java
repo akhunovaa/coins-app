@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.leon4uk.app.bot.impl.polo.Buy;
-import ru.leon4uk.app.bot.impl.polo.Sell;
+import ru.leon4uk.app.bot.impl.polo.BuyPolo;
+import ru.leon4uk.app.bot.impl.polo.SellPolo;
 import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.app.domain.Statistics;
 import ru.leon4uk.app.service.StatisticsService;
@@ -89,7 +89,7 @@ public class PoloExecutor implements Runnable{
                 statisticsService.addStatistics(statistics);
 
                 if (margeAskOne <= getPercentOne() && margeAskTwo != -100 && !reverse){
-                    ru.leon4uk.app.bot.impl.polo.Buy buy = new Buy();
+                    BuyPolo buy = new BuyPolo();
                     buy.setMarge(margeAskTwo);
                     buy.setMinAskPrice(minAskPriceOneFirst);
                     buy.setRialtoId(secondRialtoId);
@@ -113,7 +113,7 @@ public class PoloExecutor implements Runnable{
                 }
 
                 if (margeBidOne >= getPercentTwo() && margeABidTwo != 100 && reverse){
-                    ru.leon4uk.app.bot.impl.polo.Sell sell = new Sell();
+                    SellPolo sell = new SellPolo();
                     sell.setMarge(margeBidOne);
                     sell.setMaxBidPriceTwo(maxBidPriceOneFirst);
                     sell.setRialtoId(secondRialtoId);
