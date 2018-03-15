@@ -119,7 +119,7 @@ public class Sell implements Runnable {
 
         synchronized (this) {
             this.notify();
-            logger.info("Thread Buy notify!");
+            logger.info("Thread Sell notify!");
         }
     }
 
