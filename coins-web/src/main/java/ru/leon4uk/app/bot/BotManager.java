@@ -157,7 +157,7 @@ public class BotManager implements BotApplication{
         PoloExecutor poloExecutor = context.getBean(PoloExecutor.class);
         poloExecutor.setFirstRialto(rialtoPolo);
         poloExecutor.setSecondRialto(rialtoBinance);
-        poloExecutor.setFirstCurrencyPairOne("ltc_usd");
+        poloExecutor.setFirstCurrencyPairOne("USDT_LTC");
         poloExecutor.setSecondCurrencyPair("LTCUSDT");
         poloExecutor.setFirstRialtoId(2);
         poloExecutor.setSecondRialtoId(5);
