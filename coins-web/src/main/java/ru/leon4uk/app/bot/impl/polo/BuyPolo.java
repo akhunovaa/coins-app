@@ -65,9 +65,7 @@ public class BuyPolo implements Runnable {
             stringBuilder.append("<b>ID: </b>").append(poloniexOrder.getOrderNumber()).append("\n");
             stringBuilder.append("<b>RESULT: </b>").append("\n").append(poloniexOrder.getResultingTrades()).append("\n");
         }
-
         context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
-           context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
 
         synchronized (this) {
             this.notify();
