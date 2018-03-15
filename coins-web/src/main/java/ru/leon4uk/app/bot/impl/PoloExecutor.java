@@ -90,11 +90,11 @@ public class PoloExecutor implements Runnable{
 
                 if (margeAskOne <= getPercentOne() && margeAskTwo != -100 && !reverse){
                     BuyPolo buy = new BuyPolo();
-                    buy.setMarge(margeAskTwo);
+                    buy.setMarge(margeAskOne);
                     buy.setMinAskPrice(minAskPriceOneFirst);
-                    buy.setRialtoId(secondRialtoId);
-                    buy.setPair(secondCurrencyPair);
-                    buy.setRialto(secondRialto);
+                    buy.setRialtoId(firstRialtoId);
+                    buy.setPair(firstCurrencyPairOne);
+                    buy.setRialto(firstRialto);
                     buy.setContext(context);
                     Thread tBuyer = new Thread(buy, "buyer");
                     tBuyer.start();
@@ -116,9 +116,9 @@ public class PoloExecutor implements Runnable{
                     SellPolo sell = new SellPolo();
                     sell.setMarge(margeBidOne);
                     sell.setMaxBidPriceTwo(maxBidPriceOneFirst);
-                    sell.setRialtoId(secondRialtoId);
-                    sell.setPair(secondCurrencyPair);
-                    sell.setRialto(secondRialto);
+                    sell.setRialtoId(firstRialtoId);
+                    sell.setPair(firstCurrencyPairOne);
+                    sell.setRialto(firstRialto);
                     sell.setContext(context);
 
                     Thread tSeller = new Thread(sell, "seller");
@@ -133,7 +133,6 @@ public class PoloExecutor implements Runnable{
                     }
                     logger.info("Thread Sell waited!");
 
-//                context.getBean(ScheduledExecutorService.class).execute(sell);
                     reverse = false;
                 }else {
                     logger.info("Failure <Poloniex> Sell >= " + " margeBidOne: " + margeBidOne + " percentTwo: " + getPercentTwo() + " reversetwo: " + reverse);
