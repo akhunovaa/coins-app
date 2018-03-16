@@ -12,6 +12,8 @@ public interface BotApplication {
 
     void paramsEdit(Double min, Double max);
 
+    void poloParamsEdit(Double min, Double max);
+
     void botsStop();
 
     String[] getParams();

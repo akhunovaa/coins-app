@@ -116,6 +116,14 @@ public class BotManager implements BotApplication{
     }
 
     @Override
+    public void poloParamsEdit(Double min, Double max) {
+        polo.forEach((s, poloExecutor) -> {
+            poloExecutor.setPercentOne(min);
+            poloExecutor.setPercentTwo(max);
+        });
+    }
+
+    @Override
     public void botsStop() {
            tasks.forEach((s, complexCollector) -> {
                logger.info("stop!");

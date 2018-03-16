@@ -127,6 +127,12 @@ class CoinsController {
         return "redirect:/bot";
     }
 
+    @RequestMapping(value = "/bot/polo/params", params = { "min", "max"})
+    public String botPolotParamsChange(@RequestParam("min") Double min, @RequestParam("max") Double max) {
+        BotManager botApplication = context.getBean(BotManager.class);
+        botApplication.poloParamsEdit(min, max);
+        return "redirect:/bot";
+    }
     @RequestMapping("/delete/{userId}")
     public String deleteUser(@PathVariable("userId") Integer userId) {
         userService.removeUser(userId);
