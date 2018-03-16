@@ -29,8 +29,8 @@ public class PoloExecutor implements Runnable{
 
     private boolean reverse;
     private final static Logger logger = Logger.getLogger(ComplexCollector.class);
-    private double percentOne = -0.65;
-    private double percentTwo = 0.65;
+    private double percentOne = -0.26;
+    private double percentTwo = 0.35;
     private ApiService firstRialto;
     private ApiService secondRialto;
     private String firstCurrencyPairOne;
