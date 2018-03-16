@@ -32,7 +32,7 @@ public class ComplexCollector implements Runnable{
     private boolean reverse;
     private final static Logger logger = Logger.getLogger(ComplexCollector.class);
     private double percentOne = -0.9;
-    private double percentTwo = 1.5;
+    private double percentTwo = 2.0;
     private ApiService firstRialto;
     private ApiService firstRialtoHelp;
     private ApiService secondRialto;

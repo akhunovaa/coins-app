@@ -61,7 +61,7 @@ public class BotManager implements BotApplication{
             complexCollector.setContext(context);
             complexCollector.setCurrencyPairId(currencyPairId);
             logger.info("Начинаем работу с биржами " + firstRialto + " " + secondRialto);
-            Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(complexCollector, 10, 10, TimeUnit.SECONDS);
+            Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(complexCollector, 4, 4, TimeUnit.SECONDS);
             complexCollector.setFuture(periodicCollector);
             complexCollector.setFlag(Boolean.FALSE);
             tasks.put(firstRialto + " " + secondRialto + " " + firstCurrencyPairOne + " " + firstCurrencyPairTwo + " " + secondCurrencyPair + " " + currencyPairId, complexCollector);
@@ -172,7 +172,7 @@ public class BotManager implements BotApplication{
         poloExecutor.setContext(context);
         poloExecutor.setCurrencyPairId(5);
         logger.info("Начинаем работу с биржами " + "Poloniex" + " " + "Binance");
-        Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(poloExecutor, 10, 10, TimeUnit.SECONDS);
+        Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(poloExecutor, 3, 3, TimeUnit.SECONDS);
         poloExecutor.setFuture(periodicCollector);
         poloExecutor.setFlag(Boolean.FALSE);
         polo.put("Poloniex", poloExecutor);
