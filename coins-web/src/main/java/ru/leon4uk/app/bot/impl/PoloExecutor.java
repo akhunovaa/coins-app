@@ -132,7 +132,6 @@ public class PoloExecutor implements Runnable{
                         e.printStackTrace();
                     }
                     logger.info("Thread Sell waited!");
-
                     reverse = false;
                 }else {
                     logger.info("Failure <Poloniex> Sell >= " + " margeBidOne: " + margeBidOne + " percentTwo: " + getPercentTwo() + " reversetwo: " + reverse);

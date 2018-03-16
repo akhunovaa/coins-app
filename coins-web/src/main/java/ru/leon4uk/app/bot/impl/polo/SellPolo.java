@@ -36,7 +36,7 @@ public class SellPolo implements Runnable {
         PoloniexOrder poloniexOrder = null;
 
         try {
-            balance = Double.valueOf(rialto.getBitsaneBalance("LTC"));
+            balance = Double.valueOf(rialto.getBalance("LTC"));
             sellAmount = balance;
             poloniexOrder = rialto.makePoloOrder(pair, sellAmount, sellPrice, "sell");
             logger.info("Response message \n" + poloniexOrder);
