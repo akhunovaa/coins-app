@@ -107,10 +107,18 @@ class CoinsController {
     }
 
     @RequestMapping(value = "/bot/state", params = {"reverse"})
-    public String getOrderInfo(@RequestParam("reverse") String reverse) {
+    public String setState(@RequestParam("reverse") String reverse) {
         BotManager botApplication = context.getBean(BotManager.class);
         botApplication.setContext(context);
         botApplication.setReverse(Boolean.parseBoolean(reverse));
+        return "redirect:/bot";
+    }
+
+    @RequestMapping(value = "/bot/polo/state", params = {"reverse"})
+    public String setPoloState(@RequestParam("reverse") String reverse) {
+        BotManager botApplication = context.getBean(BotManager.class);
+        botApplication.setContext(context);
+        botApplication.setPoloReverse(Boolean.parseBoolean(reverse));
         return "redirect:/bot";
     }
 
