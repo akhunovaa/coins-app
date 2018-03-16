@@ -22,4 +22,6 @@ public interface BotApplication {
 
     void poloExecutor();
 
+    void setPoloReverse(Boolean state);
+
 }

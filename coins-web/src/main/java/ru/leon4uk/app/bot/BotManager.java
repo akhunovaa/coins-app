@@ -159,6 +159,13 @@ public class BotManager implements BotApplication{
     }
 
     @Override
+    public void setPoloReverse(Boolean state) {
+        polo.forEach((s, complexCollector) -> {
+            complexCollector.setReverse(state);
+        });
+    }
+
+    @Override
     public void poloExecutor() {
         ApiService rialtoPolo =  new PoloniexApi("https://poloniex.com/public?command=", "H3VEQ34R-UH7P93MY-O6S6F1AO-L8K9P8QX", "c7a6891dc9659a700084788a3bd983a5ade3643126d767d091bf804a966d3a2c83735930738f2afb3eac9ec71b5b0bfd35d05713f6a63dc608ea82beda3a23ac");
         ApiService rialtoBinance =  new BinanceApi("https://www.binance.com/api/v1/");
