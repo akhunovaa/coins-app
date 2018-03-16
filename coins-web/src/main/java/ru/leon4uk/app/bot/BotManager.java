@@ -182,8 +182,8 @@ public class BotManager implements BotApplication{
                 return new KrakenApi("https://api.kraken.com/0/");
             case 4:
                 return new BitfinexApi("https://api.bitfinex.com/v1/");
-//            case 6:
-//                return new BitsaneApi("https://bitsane.com", "77F3CFEE9C4462EB987053FB8B467686831C252D3B86A22FA6850193303C91B9", "E290A9111A88C83A93E4AB6FDC6DE37CE98D24CCE765890CDD0EF3F881475AE6");
+            case 6:
+                return new BitsaneApi("https://bitsane.com", "77F3CFEE9C4462EB987053FB8B467686831C252D3B86A22FA6850193303C91B9", "E290A9111A88C83A93E4AB6FDC6DE37CE98D24CCE765890CDD0EF3F881475AE6");
             default:
                 throw new Exception("rialto not found: " + rialto);
         }
