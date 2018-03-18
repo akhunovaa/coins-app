@@ -19,30 +19,16 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>ru.leon4uk.coins.app.web</groupId>
+    <groupId>ru.leon4uk.coins.web</groupId>
     <artifactId>coins-web</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <profiles>
-        <profile>
-            <id>module-bot</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>ru.leon4uk.coins.app.bot</groupId>
-                    <artifactId>coins-bot</artifactId>
-                    <version>1.0-SNAPSHOT</version>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
+
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -56,24 +42,38 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.5.0</version>
-                <configuration>
-                    <container>
-                        <containerId>tomcat7x</containerId>
-                        <type>installed</type>
-                        <home>/opt/web/apache-tomcat-7.0.84n</home>
-                    </container>
-                    <configuration>
-                        <type>existing</type>
-                        <home>/opt/web/apache-tomcat-7.0.84</home>
-                    </configuration>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
+    <!--<build>-->
+    <!--<plugins>-->
+    <!--<plugin>-->
+    <!--<artifactId>maven-assembly-plugin</artifactId>-->
+    <!--<version>3.0.0</version>-->
+    <!--<configuration>-->
+    <!--<descriptorRefs>-->
+    <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+    <!--</descriptorRefs>-->
+    <!--</configuration>-->
+    <!--<executions>-->
+    <!--<execution>-->
+    <!--<id>make-assembly</id>-->
+    <!--<phase>package</phase>-->
+    <!--<goals>-->
+    <!--<goal>single</goal>-->
+    <!--</goals>-->
+    <!--</execution>-->
+    <!--</executions>-->
+    <!--</plugin>-->
+    <!--<plugin>-->
+    <!--<groupId>org.apache.maven.plugins</groupId>-->
+    <!--<artifactId>maven-compiler-plugin</artifactId>-->
+    <!--<configuration>-->
+    <!--<source>1.8</source>-->
+    <!--<target>1.8</target>-->
+    <!--</configuration>-->
+    <!--</plugin>-->
+    <!--</plugins>-->
+    <!--</build>-->
 
     <dependencies>
 
@@ -89,6 +89,21 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.0.1</version>
@@ -100,6 +115,53 @@
             <version>1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.2-GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.leon4uk.coins</groupId>
+            <artifactId>coins-maker</artifactId>
+            <version>${apidaemon.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>${telegram.version}</version>
+            <!--<scope>provided</scope>-->
+        </dependency>
+
+
+        <!--<dependency>-->
+            <!--<groupId>org.telegram</groupId>-->
+            <!--<artifactId>telegrambots-meta</artifactId>-->
+            <!--<version>${telegram.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--<artifactId>jackson-core</artifactId>-->
+        <!--<version>${jackson.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>com.fasterxml.jackson.jaxrs</groupId>-->
+        <!--<artifactId>jackson-jaxrs-json-provider</artifactId>-->
+        <!--<version>${jackson.version}</version>-->
+        <!--</dependency>-->
     </dependencies>
 
 </project>
