@@ -173,11 +173,11 @@ public class ComplexCollector implements Runnable{
                     context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
         }catch (Exception e) {
                     logger.error("Неизвестная ошибка в потоке", e);
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("Неизвестная ошибка в потоке").append("\n");
-                    stringBuilder.append(e.getMessage()).append("\n");
-                    stringBuilder.append(e.getLocalizedMessage()).append("\n");
-                    context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+//                    StringBuilder stringBuilder = new StringBuilder();
+//                    stringBuilder.append("Неизвестная ошибка в потоке").append("\n");
+//                    stringBuilder.append(e.getMessage()).append("\n");
+//                    stringBuilder.append(e.getLocalizedMessage()).append("\n");
+//                    context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
         }
             }
 

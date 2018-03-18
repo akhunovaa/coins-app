@@ -30,7 +30,7 @@ public class PoloExecutor implements Runnable{
     private boolean reverse;
     private final static Logger logger = Logger.getLogger(ComplexCollector.class);
     private double percentOne = -0.26;
-    private double percentTwo = 0.35;
+    private double percentTwo = 0.26;
     private ApiService firstRialto;
     private ApiService secondRialto;
     private String firstCurrencyPairOne;
@@ -139,15 +139,15 @@ public class PoloExecutor implements Runnable{
             }catch (IOException e) {
                 logger.error("Ошибка в запросе API Poloniex/Binance", e);
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Ошибка в запросе API API Poloniex/Binance").append("\n");
+                stringBuilder.append("Ошибка в запросе API Poloniex/Binance").append("\n");
                 stringBuilder.append(e.getMessage()).append("\n");
                 context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
             }catch (Exception ex) {
                 logger.error("Неизвестная ошибка в потоке", ex);
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("Неизвестная ошибка в потоке").append("\n");
-                stringBuilder.append(ex.getMessage()).append("\n");
-                context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+//                StringBuilder stringBuilder = new StringBuilder();
+//                stringBuilder.append("Неизвестная ошибка в потоке").append("\n");
+//                stringBuilder.append(ex.getMessage()).append("\n");
+//                context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
             }
         }
 
