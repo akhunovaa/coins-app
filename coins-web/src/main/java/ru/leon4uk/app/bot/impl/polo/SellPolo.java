@@ -84,9 +84,9 @@ public class SellPolo implements Runnable {
                 try {
                     String orderCancelResult = rialto.orderCancel(String.valueOf(poloniexOrder.getOrderNumber()));
                     logger.info("orderCancelResult " + orderCancelResult);
-                    context.getBean(Telegram.class).sendMessage("Оммена ордера на покупку " + orderCancelResult);
+                    context.getBean(Telegram.class).sendMessage("Отмена ордера на продажу " + orderCancelResult);
                     sellPrice -= 0.01;
-                    poloniexOrder = rialto.makePoloOrder(pair, sellAmount, sellPrice, "buy");
+                    poloniexOrder = rialto.makePoloOrder(pair, sellAmount, sellPrice, "sell");
                     logger.info("Response message \n" + poloniexOrder);
                     orderHandler.setPrice(sellPrice);
                     periodicOrderHandler = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(orderHandler, 20, 5000, TimeUnit.MILLISECONDS);
