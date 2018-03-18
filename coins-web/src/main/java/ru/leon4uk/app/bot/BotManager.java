@@ -61,7 +61,7 @@ public class BotManager implements BotApplication{
             complexCollector.setContext(context);
             complexCollector.setCurrencyPairId(currencyPairId);
             logger.info("Начинаем работу с биржами " + firstRialto + " " + secondRialto);
-            Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(complexCollector, 8, 8, TimeUnit.SECONDS);
+            Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(complexCollector, 10, 10, TimeUnit.SECONDS);
             complexCollector.setFuture(periodicCollector);
             complexCollector.setFlag(Boolean.FALSE);
             tasks.put(firstRialto + " " + secondRialto + " " + firstCurrencyPairOne + " " + firstCurrencyPairTwo + " " + secondCurrencyPair + " " + currencyPairId, complexCollector);
@@ -169,7 +169,28 @@ public class BotManager implements BotApplication{
     public void poloExecutor() {
         ApiService rialtoPolo =  new PoloniexApi("https://poloniex.com/public?command=", "H3VEQ34R-UH7P93MY-O6S6F1AO-L8K9P8QX", "c7a6891dc9659a700084788a3bd983a5ade3643126d767d091bf804a966d3a2c83735930738f2afb3eac9ec71b5b0bfd35d05713f6a63dc608ea82beda3a23ac");
         ApiService rialtoBinance =  new BinanceApi("https://www.binance.com/api/v1/");
+        logger.info("Начинаем работу с биржами " + "Poloniex" + " " + "Binance");
         PoloExecutor poloExecutor = context.getBean(PoloExecutor.class);
+        Double usdtBalance = 0.0;
+        Double ltBalance = 0.0;
+        Double ltcValueInUsdt = 0.0;
+        try {
+            usdtBalance = Double.valueOf(rialtoPolo.getBalance("USDT"));
+            ltBalance = Double.valueOf(rialtoPolo.getBalance("LTC"));
+            ltcValueInUsdt = Double.valueOf(rialtoPolo.getBidPrices("USDT_LTC").get(0)) * ltBalance;
+        } catch (IOException e) {
+            logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
+            context.getBean(Telegram.class).sendMessage("Ошибка получения баланса/выставлении ордера валюты " + e.getMessage());
+        }
+        logger.info("Баланс Poloniex USDT: " + usdtBalance  + " LTC: " + ltBalance);
+
+        if (ltcValueInUsdt > usdtBalance){
+            logger.info("Start work from LTC SELL");
+            poloExecutor.setReverse(Boolean.TRUE);
+        }else {
+            logger.info("Start work from LTC BUY");
+            poloExecutor.setReverse(Boolean.FALSE);
+        }
         poloExecutor.setFirstRialto(rialtoPolo);
         poloExecutor.setSecondRialto(rialtoBinance);
         poloExecutor.setFirstCurrencyPairOne("USDT_LTC");
@@ -178,7 +199,6 @@ public class BotManager implements BotApplication{
         poloExecutor.setSecondRialtoId(5);
         poloExecutor.setContext(context);
         poloExecutor.setCurrencyPairId(5);
-        logger.info("Начинаем работу с биржами " + "Poloniex" + " " + "Binance");
         Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(poloExecutor, 3, 3, TimeUnit.SECONDS);
         poloExecutor.setFuture(periodicCollector);
         poloExecutor.setFlag(Boolean.FALSE);

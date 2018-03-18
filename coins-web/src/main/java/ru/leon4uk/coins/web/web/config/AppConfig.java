@@ -55,7 +55,7 @@ public class AppConfig {
 
     @Bean
     public ScheduledThreadPoolExecutor scheduledExecutorService() {
-        ScheduledThreadPoolExecutor sch = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(1);
+        ScheduledThreadPoolExecutor sch = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(6);
         sch.setRemoveOnCancelPolicy(true);
         return sch;
     }

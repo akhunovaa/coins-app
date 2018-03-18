@@ -4,13 +4,15 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.leon4uk.app.bot.impl.buffer.BitsaneBuyOrderBuffer;
 import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.coins.service.ApiService;
 import ru.leon4uk.coins.service.poloniex.entity.PoloniexOrder;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Scope("prototype")
@@ -24,7 +26,9 @@ public class BuyPolo implements Runnable {
     private double minAskPrice;
     private int rialtoId;
     private String pair;
+    private Boolean fail;
 
+    private Future<?> periodicOrderHandler;
 
     public BuyPolo() {
     }
@@ -35,41 +39,123 @@ public class BuyPolo implements Runnable {
         double balance = 0.0;
         double buyPrice = minAskPrice;
         double buyAmount = 0;
+
         PoloniexOrder poloniexOrder = null;
         try {
-            balance = Double.valueOf(rialto.getBalance("USDT"));
+            balance = Double.valueOf(rialto.getBalance("USDT")) - 0.02;
             buyAmount = balance / buyPrice;
-            buyAmount = Math.round(buyAmount*100000)/100000.0;
+            buyAmount = Math.round(buyAmount * 100000) / 100000.0;
             poloniexOrder = rialto.makePoloOrder(pair, buyAmount, buyPrice, "buy");
             logger.info("Response message \n" + poloniexOrder);
         } catch (IOException e) {
             logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
+            context.getBean(Telegram.class).sendMessage("Ошибка получения баланса/выставления ордера валюты " + e.getMessage());
         }
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        if (null != poloniexOrder) {
+            logger.info("BUY ORDER" + poloniexOrder.getOrderNumber() + "BALANCE: " + balance + " BUY AMOUNT " + buyAmount + " RESULT: \n " + poloniexOrder.getResultingTrades());
+            OrderHandler orderHandler = new OrderHandler();
+            orderHandler.setContext(context);
+            orderHandler.setMarge(marge);
+            orderHandler.setOrderNumber(poloniexOrder.getOrderNumber());
+            orderHandler.setPair(pair);
+            orderHandler.setPrice(buyPrice);
+            orderHandler.setRialto(rialto);
+            orderHandler.setFail(Boolean.FALSE);
+            periodicOrderHandler = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(orderHandler, 20, 5000, TimeUnit.MILLISECONDS);
+            orderHandler.setFuture(periodicOrderHandler);
+            orderHandler.setFlag(Boolean.FALSE);
+            synchronized (orderHandler.getFuture()) {
+                    try {
+                        logger.info("wait!");
+                        orderHandler.getFuture().wait();
+                        logger.info("waited!");
+                        logger.info("stop!");
+                    } catch (InterruptedException e) {
+                        logger.error("Ошибка при остановке просмоторщика ордеров", e);
+                        context.getBean(Telegram.class).sendMessage("Ошибка при остановке просмоторщика ордеров " + e.getMessage());
+                    }
+            }
+            int count = 0;
 
-        if (poloniexOrder != null) {
-            logger.info("BUY ORDER" + poloniexOrder.getOrderNumber() + " RESULT: \n " + poloniexOrder.getResultingTrades());
-        }
-
-            logger.info("BOUGHT: MARGE-" + marge + " PRICE-" + minAskPrice + " PAIR-" + pair + "CURRENCY_BUY-" + "LTC");
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("<b>[CREATE ORDER BUY]</b>").append("\n");
-            stringBuilder.append("<b>QTY: </b>").append(buyAmount).append(" [").append(pair).append("] ").append(" (").append(buyPrice).append(") ").append(" [").append(minAskPrice).append("] ").append("\n");
-            stringBuilder.append("<b>Diff: </b>").append(new DecimalFormat("#.#####").format(marge)).append("\n");
-        if (poloniexOrder != null) {
-            stringBuilder.append("<b>ID: </b>").append(poloniexOrder.getOrderNumber()).append("\n");
-            stringBuilder.append("<b>RESULT: </b>").append("\n").append(poloniexOrder.getResultingTrades()).append("\n");
-        }
-        context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
-
-        synchronized (this) {
-            this.notify();
-            logger.info("Thread Buy notify!");
+            while (orderHandler.getFail()) {
+                try {
+                    String orderCancelResult = rialto.orderCancel(String.valueOf(poloniexOrder.getOrderNumber()));
+                    logger.info("orderCancelResult " + orderCancelResult);
+                    context.getBean(Telegram.class).sendMessage("Оммена ордера на покупку " + orderCancelResult);
+                    buyPrice -= 0.01;
+                    buyAmount = balance / buyPrice;
+                    buyAmount = Math.round(buyAmount * 100000) / 100000.0;
+                    poloniexOrder = rialto.makePoloOrder(pair, buyAmount, buyPrice, "buy");
+                    logger.info("Response message \n" + poloniexOrder);
+                    orderHandler.setPrice(buyPrice);
+                    periodicOrderHandler = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(orderHandler, 20, 5000, TimeUnit.MILLISECONDS);
+                    orderHandler.setFuture(periodicOrderHandler);
+                    orderHandler.setFlag(Boolean.FALSE);
+                    synchronized (orderHandler.getFuture()) {
+                        try {
+                            logger.info("wait!");
+                            orderHandler.getFuture().wait();
+                            logger.info("waited!");
+                            logger.info("stop!");
+                        } catch (InterruptedException e) {
+                            logger.error("Ошибка при остановке просмоторщика ордеров", e);
+                            context.getBean(Telegram.class).sendMessage("Ошибка при остановке просмоторщика ордеров " + e.getMessage());
+                        }
+                    }
+                    count ++;
+                } catch (IOException e) {
+                    logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
+                    context.getBean(Telegram.class).sendMessage("Ошибка получения баланса/выставлении ордера валюты " + e.getMessage());
+                }
+                if (count >= 10){
+                    orderHandler.setFail(Boolean.FALSE);
+                    this.fail = Boolean.TRUE;
+                    logger.info("Order fail: " + poloniexOrder.getOrderNumber() + " with the price " + buyPrice);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("<b>[ORDER FAIL]</b>").append("\n");
+                    stringBuilder.append("<b>ID: </b>").append(poloniexOrder.getOrderNumber()).append(" [").append(pair).append("] ").append("\n");
+                    context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+                    logger.info("Order fail: " + poloniexOrder.getOrderNumber() + " with the price " + buyPrice);
+                    count = 0;
+                }
+            }
+            while(this.fail){
+                logger.info("WAIT's for manual odrer execution. Please BUY some LTC " + marge + " PRICE: " + minAskPrice + " PAIR: " + pair);
+                Double usdtBalance = 0.0;
+                Double ltBalance = 0.0;
+                try {
+                    usdtBalance = Double.valueOf(rialto.getBalance("USDT"));
+                    ltBalance = Double.valueOf(rialto.getBalance("LTC"));
+                } catch (IOException e) {
+                    logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
+                    context.getBean(Telegram.class).sendMessage("Ошибка получения баланса/выставлении ордера валюты " + e.getMessage());
+                }
+                if (usdtBalance < 1.0 && ltBalance >= 0.02){
+                    logger.info("Poloniex Balance is ok. Checked. Continue to work now! + usdtBalance " + usdtBalance + "  ltBalance " + ltBalance);
+                    context.getBean(Telegram.class).sendMessage("Poloniex Balance is ok. Checked. Continue to work now! usdtBalance " + usdtBalance + "  ltBalance " + ltBalance);
+                    this.fail = Boolean.FALSE;
+                }
+                try {
+                    Thread.sleep(60000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (!this.fail){
+                logger.info("BOUGHT! MARGE: " + marge + " PRICE: " + minAskPrice + "(" + buyPrice + ")" +" PAIR: " + pair + "CURRENCY_BUY: " + "LTC");
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("<b>[BUY]</b>").append("\n");
+                stringBuilder.append("<b>QTY: </b>").append(buyAmount).append(" [").append(pair).append("] ").append(" (").append(buyPrice).append(") ").append(" [").append(minAskPrice).append("] ").append("\n");
+                stringBuilder.append("<b>Diff: </b>").append(new DecimalFormat("#.#####").format(marge)).append("\n");
+                stringBuilder.append("<b>ID: </b>").append(poloniexOrder.getOrderNumber()).append("\n");
+                stringBuilder.append("<b>RESULT: </b>").append("\n").append(poloniexOrder.getResultingTrades()).append("\n");
+                context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+                synchronized (this) {
+                    this.notify();
+                    logger.info("Thread Buy notify!");
+                }
+            }
         }
     }
 
@@ -120,5 +206,13 @@ public class BuyPolo implements Runnable {
 
     public void setContext(ApplicationContext context) {
         this.context = context;
+    }
+
+    public synchronized Boolean getFail() {
+        return fail;
+    }
+
+    public synchronized void setFail(Boolean fail) {
+        this.fail = fail;
     }
 }
