@@ -82,7 +82,7 @@ public class BuyPolo implements Runnable {
                 try {
                     String orderCancelResult = rialto.orderCancel(String.valueOf(poloniexOrder.getOrderNumber()));
                     logger.info("orderCancelResult " + orderCancelResult);
-                    context.getBean(Telegram.class).sendMessage("Оммена ордера на покупку " + orderCancelResult);
+                    context.getBean(Telegram.class).sendMessage("Отмена ордера на покупку " + orderCancelResult);
                     buyPrice -= 0.01;
                     buyAmount = balance / buyPrice;
                     buyAmount = Math.round(buyAmount * 100000) / 100000.0;
