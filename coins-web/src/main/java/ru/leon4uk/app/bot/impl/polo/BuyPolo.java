@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import ru.leon4uk.app.bot.rocket.Rocket;
 import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.coins.service.ApiService;
 import ru.leon4uk.coins.service.poloniex.entity.PoloniexOrder;
@@ -49,7 +50,7 @@ public class BuyPolo implements Runnable {
             logger.info("Response message \n" + poloniexOrder);
         } catch (IOException e) {
             logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
-            context.getBean(Telegram.class).sendMessage("Ошибка получения баланса/выставления ордера валюты " + e.getMessage());
+            context.getBean(Rocket.class).sendMessage("Ошибка получения баланса/выставления ордера валюты " + e.getMessage());
         }
 
         if (null != poloniexOrder) {
@@ -72,18 +73,19 @@ public class BuyPolo implements Runnable {
                         logger.info("waited!");
                         logger.info("stop!");
                     } catch (InterruptedException e) {
-                        logger.error("Ошибка при остановке просмоторщика ордеров", e);
-                        context.getBean(Telegram.class).sendMessage("Ошибка при остановке просмоторщика ордеров " + e.getMessage());
+                        logger.error("Ошибка при остановке просмотрщика ордеров", e);
+                        context.getBean(Rocket.class).sendMessage("Ошибка при остановке просмотрщика ордеров " + e.getMessage());
                     }
             }
             int count = 0;
 
             while (orderHandler.getFail()) {
+                orderHandler.setCount(0);
                 try {
                     String orderCancelResult = rialto.orderCancel(String.valueOf(poloniexOrder.getOrderNumber()));
                     logger.info("orderCancelResult " + orderCancelResult);
-                    context.getBean(Telegram.class).sendMessage("Отмена ордера на покупку " + orderCancelResult);
-                    buyPrice -= 0.01;
+                    context.getBean(Rocket.class).sendMessage("Отмена ордера на покупку " + orderCancelResult);
+                    buyPrice += 0.10;
                     buyAmount = balance / buyPrice;
                     buyAmount = Math.round(buyAmount * 100000) / 100000.0;
                     poloniexOrder = rialto.makePoloOrder(pair, buyAmount, buyPrice, "buy");
@@ -99,14 +101,14 @@ public class BuyPolo implements Runnable {
                             logger.info("waited!");
                             logger.info("stop!");
                         } catch (InterruptedException e) {
-                            logger.error("Ошибка при остановке просмоторщика ордеров", e);
-                            context.getBean(Telegram.class).sendMessage("Ошибка при остановке просмоторщика ордеров " + e.getMessage());
+                            logger.error("Ошибка при остановке просмотрщика ордеров", e);
+                            context.getBean(Rocket.class).sendMessage("Ошибка при остановке просмотрщика ордеров " + e.getMessage());
                         }
                     }
                     count ++;
                 } catch (IOException e) {
                     logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
-                    context.getBean(Telegram.class).sendMessage("Ошибка получения баланса/выставлении ордера валюты " + e.getMessage());
+                    context.getBean(Rocket.class).sendMessage("Ошибка получения баланса/выставлении ордера валюты " + e.getMessage());
                 }
                 if (count >= 10){
                     orderHandler.setFail(Boolean.FALSE);
@@ -115,7 +117,7 @@ public class BuyPolo implements Runnable {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("<b>[ORDER FAIL]</b>").append("\n");
                     stringBuilder.append("<b>ID: </b>").append(poloniexOrder.getOrderNumber()).append(" [").append(pair).append("] ").append("\n");
-                    context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+                    context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
                     logger.info("Order fail: " + poloniexOrder.getOrderNumber() + " with the price " + buyPrice);
                     count = 0;
                 }
@@ -129,15 +131,15 @@ public class BuyPolo implements Runnable {
                     ltBalance = Double.valueOf(rialto.getBalance("LTC"));
                 } catch (IOException e) {
                     logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
-                    context.getBean(Telegram.class).sendMessage("Ошибка получения баланса/выставлении ордера валюты " + e.getMessage());
+                    context.getBean(Rocket.class).sendMessage("Ошибка получения баланса/выставлении ордера валюты " + e.getMessage());
                 }
                 if (usdtBalance < 1.0 && ltBalance >= 0.02){
                     logger.info("Poloniex Balance is ok. Checked. Continue to work now! + usdtBalance " + usdtBalance + "  ltBalance " + ltBalance);
-                    context.getBean(Telegram.class).sendMessage("Poloniex Balance is ok. Checked. Continue to work now! usdtBalance " + usdtBalance + "  ltBalance " + ltBalance);
+                    context.getBean(Rocket.class).sendMessage("Poloniex Balance is ok. Checked. Continue to work now! usdtBalance " + usdtBalance + "  ltBalance " + ltBalance);
                     this.fail = Boolean.FALSE;
                 }
                 try {
-                    Thread.sleep(60000);
+                    Thread.sleep(30000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -150,7 +152,7 @@ public class BuyPolo implements Runnable {
                 stringBuilder.append("<b>Diff: </b>").append(new DecimalFormat("#.#####").format(marge)).append("\n");
                 stringBuilder.append("<b>ID: </b>").append(poloniexOrder.getOrderNumber()).append("\n");
                 stringBuilder.append("<b>RESULT: </b>").append("\n").append(poloniexOrder.getResultingTrades()).append("\n");
-                context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+                context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
                 synchronized (this) {
                     this.notify();
                     logger.info("Thread Buy notify!");

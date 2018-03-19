@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneBuyOrderBuffer;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneSellOrderBuffer;
+import ru.leon4uk.app.bot.rocket.Rocket;
 import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.coins.service.ApiService;
 import ru.leon4uk.coins.service.bitsane.entity.BitsaneOrder;
@@ -102,7 +103,7 @@ public class Sell implements Runnable {
             stringBuilder.append("<b>executed_amount: </b>").append(bitsaneOrder.getExecutedAmount()).append("\n");
             stringBuilder.append("<b>remaining_amount: </b>").append(bitsaneOrder.getRemainingAmount()).append("\n");
             stringBuilder.append("<b>original_amount: </b>").append(bitsaneOrder.getOriginalAmount()).append("\n");
-            context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+            context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
         }else {
             logger.info("SOLD: MARGE-" + marge + " PRICE-" + maxBidPriceTwo + " PAIR-" + pair + "CURRENCY_SELL-" + "LTC");
             StringBuilder stringBuilder = new StringBuilder();
@@ -113,7 +114,7 @@ public class Sell implements Runnable {
                 stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
             else
                 stringBuilder.append("<b>ID: </b>").append(response).append("\n");
-            context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+            context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
             context.getBean(BitsaneSellOrderBuffer.class).setStatus(Boolean.FALSE);
         }
 

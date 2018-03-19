@@ -7,6 +7,7 @@ import ru.leon4uk.app.bot.impl.ComplexCollector;
 import ru.leon4uk.app.bot.impl.PoloExecutor;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneBuyOrderBuffer;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneSellOrderBuffer;
+import ru.leon4uk.app.bot.rocket.Rocket;
 import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.coins.service.ApiService;
 import ru.leon4uk.coins.service.binance.api.BinanceApi;
@@ -102,7 +103,7 @@ public class BotManager implements BotApplication{
             stringBuilder.append("Remaining amount: ").append(bitsaneOrder.getRemainingAmount()).append("\n");
             stringBuilder.append("Executed amount: ").append(bitsaneOrder.getExecutedAmount()).append("\n");
             stringBuilder.append("Original amount: ").append(bitsaneOrder.getOriginalAmount()).append("\n");
-            context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+            context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
         }
         return stringBuilder.toString();
     }
@@ -180,7 +181,7 @@ public class BotManager implements BotApplication{
             ltcValueInUsdt = Double.valueOf(rialtoPolo.getBidPrices("USDT_LTC").get(0)) * ltBalance;
         } catch (IOException e) {
             logger.error("Ошибка получения баланса/выставлении ордера валюты", e);
-            context.getBean(Telegram.class).sendMessage("Ошибка получения баланса/выставлении ордера валюты " + e.getMessage());
+            context.getBean(Rocket.class).sendMessage("Ошибка получения баланса/выставлении ордера валюты " + e.getMessage());
         }
         logger.info("Баланс Poloniex USDT: " + usdtBalance  + " LTC: " + ltBalance);
 
@@ -199,7 +200,7 @@ public class BotManager implements BotApplication{
         poloExecutor.setSecondRialtoId(5);
         poloExecutor.setContext(context);
         poloExecutor.setCurrencyPairId(5);
-        Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(poloExecutor, 3, 3, TimeUnit.SECONDS);
+        Future<?> periodicCollector = context.getBean(ScheduledExecutorService.class).scheduleWithFixedDelay(poloExecutor, 3, 1, TimeUnit.SECONDS);
         poloExecutor.setFuture(periodicCollector);
         poloExecutor.setFlag(Boolean.FALSE);
         polo.put("Poloniex", poloExecutor);

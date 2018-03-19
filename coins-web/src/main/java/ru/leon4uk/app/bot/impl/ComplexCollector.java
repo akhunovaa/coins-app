@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneBuyOrderBuffer;
 import ru.leon4uk.app.bot.impl.buffer.BitsaneSellOrderBuffer;
+import ru.leon4uk.app.bot.rocket.Rocket;
 import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.app.domain.Statistics;
 import ru.leon4uk.app.service.StatisticsService;
@@ -170,7 +171,7 @@ public class ComplexCollector implements Runnable{
                     stringBuilder.append("Ошибка в запросе API").append("\n");
                     stringBuilder.append(e.getMessage()).append("\n");
                     stringBuilder.append(e.getLocalizedMessage()).append("\n");
-                    context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+                    context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
         }catch (Exception e) {
                     logger.error("Неизвестная ошибка в потоке", e);
 //                    StringBuilder stringBuilder = new StringBuilder();
