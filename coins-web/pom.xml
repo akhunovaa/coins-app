@@ -44,38 +44,20 @@
             </plugin>
         </plugins>
     </build>
-    <!--<build>-->
-    <!--<plugins>-->
-    <!--<plugin>-->
-    <!--<artifactId>maven-assembly-plugin</artifactId>-->
-    <!--<version>3.0.0</version>-->
-    <!--<configuration>-->
-    <!--<descriptorRefs>-->
-    <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
-    <!--</descriptorRefs>-->
-    <!--</configuration>-->
-    <!--<executions>-->
-    <!--<execution>-->
-    <!--<id>make-assembly</id>-->
-    <!--<phase>package</phase>-->
-    <!--<goals>-->
-    <!--<goal>single</goal>-->
-    <!--</goals>-->
-    <!--</execution>-->
-    <!--</executions>-->
-    <!--</plugin>-->
-    <!--<plugin>-->
-    <!--<groupId>org.apache.maven.plugins</groupId>-->
-    <!--<artifactId>maven-compiler-plugin</artifactId>-->
-    <!--<configuration>-->
-    <!--<source>1.8</source>-->
-    <!--<target>1.8</target>-->
-    <!--</configuration>-->
-    <!--</plugin>-->
-    <!--</plugins>-->
-    <!--</build>-->
 
     <dependencies>
+
+        <dependency>
+            <groupId>ru.futuredreams.rocketchat.api</groupId>
+            <artifactId>rocketchat-api-client</artifactId>
+            <version>${rocket.version}</version>
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+                    <!--<artifactId>jackson-databind</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -142,9 +124,8 @@
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
             <version>${telegram.version}</version>
-            <!--<scope>provided</scope>-->
+              <scope>runtime</scope>
         </dependency>
-
 
         <!--<dependency>-->
             <!--<groupId>org.telegram</groupId>-->

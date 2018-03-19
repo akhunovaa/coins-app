@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.leon4uk.app.bot.BotManager;
+import ru.leon4uk.app.bot.rocket.Rocket;
 import ru.leon4uk.app.domain.Statistics;
 import ru.leon4uk.app.service.CurrencyPairService;
 import ru.leon4uk.app.service.StatisticsService;
@@ -23,6 +24,9 @@ class CoinsController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private Rocket rocket;
 
     @Autowired
     private ApplicationContext context;
@@ -90,10 +94,9 @@ class CoinsController {
         return "redirect:/bot";
     }
 
-    @RequestMapping("/prices")
-    public String getPrice(Map<String, Object> map) {
-        map.put("statistics", new Statistics().getAskMargeOne());
-        map.put("listStatistics", statisticService.listStatistics());
+    @RequestMapping("/rocket")
+    public String testRocket() {
+        rocket.sendMessage("test");
         return "redirect:/bot";
     }
 

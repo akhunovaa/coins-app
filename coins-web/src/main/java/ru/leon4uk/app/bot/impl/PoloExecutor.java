@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.leon4uk.app.bot.impl.polo.BuyPolo;
 import ru.leon4uk.app.bot.impl.polo.SellPolo;
+import ru.leon4uk.app.bot.rocket.Rocket;
 import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.app.domain.Statistics;
 import ru.leon4uk.app.service.StatisticsService;
@@ -141,13 +142,13 @@ public class PoloExecutor implements Runnable{
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("Ошибка в запросе API Poloniex/Binance").append("\n");
                 stringBuilder.append(e.getMessage()).append("\n");
-                context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+                context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
             }catch (Exception ex) {
                 logger.error("Неизвестная ошибка в потоке", ex);
 //                StringBuilder stringBuilder = new StringBuilder();
 //                stringBuilder.append("Неизвестная ошибка в потоке").append("\n");
 //                stringBuilder.append(ex.getMessage()).append("\n");
-//                context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+//                context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
             }
         }
 

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import ru.leon4uk.app.bot.rocket.Rocket;
 import ru.leon4uk.app.bot.telegram.Telegram;
 import ru.leon4uk.coins.service.ApiService;
 import ru.leon4uk.coins.service.poloniex.entity.PoloniexOpenOrder;
@@ -49,22 +50,23 @@ public class OrderHandler implements Runnable {
                 openOrdersList = rialto.getPoloOpenOrdersList(pair);
             } catch (IOException e) {
                 logger.error("Order list get : " + orderNumber + " takes an error", e);
-                context.getBean(Telegram.class).sendMessage("Order list get : " + orderNumber + " takes an error " + e.getMessage());
+                context.getBean(Rocket.class).sendMessage("Order list get : " + orderNumber + " takes an error " + e.getMessage());
             }
             if (null != openOrdersList && openOrdersList.isEmpty()) {
                 flag = Boolean.TRUE;
+                this.setFail(Boolean.FALSE);
                 logger.info("Order completed: " + orderNumber + " with the price " + price);
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("<b>[ORDER COMPLETED]</b>").append("\n");
                 stringBuilder.append("<b>ID: </b>").append(orderNumber).append(" [").append(pair).append("] ").append("\n");
-                context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+                context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
                 logger.info("End control of the order: " + orderNumber + " with the price " + price);
             }else {
                 int tri = getCount();
                 setCount(++tri);
             }
 
-            if (this.count >= 60){
+            if (this.count == 60){
                 flag = Boolean.TRUE;
                 this.setFail(Boolean.TRUE);
                 logger.info("Order fail: " + orderNumber + " with the price " + price);
@@ -72,7 +74,7 @@ public class OrderHandler implements Runnable {
                 stringBuilder.append("<b>[ORDER FAIL]</b>").append("\n");
                 stringBuilder.append("<b>ID: </b>").append(orderNumber).append(" [").append(pair).append("] ").append("\n");
                 stringBuilder.append("<b>INFO: </b>").append(openOrdersList).append("\n");
-                context.getBean(Telegram.class).sendMessage(stringBuilder.toString());
+                context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
                 this.count = 0;
                 logger.info("End control of the FAILED order: " + orderNumber + " with the price " + price);
             }
