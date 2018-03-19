@@ -26,9 +26,6 @@ class CoinsController {
     private UserService userService;
 
     @Autowired
-    private Rocket rocket;
-
-    @Autowired
     private ApplicationContext context;
 
     @Autowired
@@ -91,12 +88,6 @@ class CoinsController {
     public String borParamsChange(@RequestParam("min") Double min, @RequestParam("max") Double max) {
         BotManager botApplication = context.getBean(BotManager.class);
         botApplication.paramsEdit(min, max);
-        return "redirect:/bot";
-    }
-
-    @RequestMapping("/rocket")
-    public String testRocket() {
-        rocket.sendMessage("test");
         return "redirect:/bot";
     }
 
