@@ -87,7 +87,7 @@ public class SellPolo implements Runnable {
                     String orderCancelResult = rialto.orderCancel(String.valueOf(poloniexOrder.getOrderNumber()));
                     logger.info("orderCancelResult " + orderCancelResult);
                     context.getBean(Rocket.class).sendMessage("Отмена ордера на продажу " + orderCancelResult);
-                    sellPrice -= 0.001;
+                    sellPrice -= 0.1;
                     poloniexOrder = rialto.makePoloOrder(pair, sellAmount, sellPrice, "sell");
                     logger.info("Response message \n" + poloniexOrder);
                     orderHandler.setPrice(sellPrice);
