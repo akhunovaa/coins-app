@@ -32,6 +32,7 @@ public class PoloExecutor implements Runnable{
     private final static Logger logger = Logger.getLogger(ComplexCollector.class);
     private double percentOne = -0.26;
     private double percentTwo = 0.26;
+    private double askPrice = 0.0;
     private ApiService firstRialto;
     private ApiService secondRialto;
     private String firstCurrencyPairOne;
@@ -90,6 +91,7 @@ public class PoloExecutor implements Runnable{
                 statisticsService.addStatistics(statistics);
 
                 if (margeAskOne <= getPercentOne() && margeAskTwo != -100 && !reverse){
+                    askPrice = minAskPriceOneFirst + 1.3;
                     BuyPolo buy = new BuyPolo();
                     buy.setMarge(margeAskOne);
                     buy.setMinAskPrice(minAskPriceOneFirst);
@@ -113,30 +115,59 @@ public class PoloExecutor implements Runnable{
                     logger.info("Failure <Poloniex> Buy <= " + " margeAskOne: " + margeAskOne + " percentOne: " + getPercentOne() + " !reversetwo: " + reverse);
                 }
 
-                if (margeBidOne >= getPercentTwo() && margeABidTwo != 100 && reverse){
-                    SellPolo sell = new SellPolo();
-                    sell.setMarge(margeBidOne);
-                    sell.setMaxBidPriceTwo(maxBidPriceOneFirst);
-                    sell.setRialtoId(firstRialtoId);
-                    sell.setPair(firstCurrencyPairOne);
-                    sell.setRialto(firstRialto);
-                    sell.setContext(context);
+                //if (margeBidOne >= getPercentTwo() && margeABidTwo != 100 && reverse){
+                if (askPrice != 0){
+                    if (maxBidPriceOneFirst > askPrice && reverse){
+                        SellPolo sell = new SellPolo();
+                        sell.setMarge(margeBidOne);
+                        sell.setMaxBidPriceTwo(maxBidPriceOneFirst);
+                        sell.setRialtoId(firstRialtoId);
+                        sell.setPair(firstCurrencyPairOne);
+                        sell.setRialto(firstRialto);
+                        sell.setContext(context);
 
-                    Thread tSeller = new Thread(sell, "seller");
-                    tSeller.start();
-                    try {
-                        synchronized (tSeller) {
-                            logger.info("Thread Sell wait!");
-                            tSeller.wait();
+                        Thread tSeller = new Thread(sell, "seller");
+                        tSeller.start();
+                        try {
+                            synchronized (tSeller) {
+                                logger.info("Thread Sell wait!");
+                                tSeller.wait();
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        logger.info("Thread Sell waited!");
+                        reverse = false;
+                    }else {
+                        logger.info("Failure <Poloniex> Sell >= " + " margeBidOne: " + margeBidOne + " percentTwo: " + getPercentTwo() + " reversetwo: " + reverse);
                     }
-                    logger.info("Thread Sell waited!");
-                    reverse = false;
                 }else {
-                    logger.info("Failure <Poloniex> Sell >= " + " margeBidOne: " + margeBidOne + " percentTwo: " + getPercentTwo() + " reversetwo: " + reverse);
+                    if (margeBidOne >= getPercentTwo() && margeABidTwo != 100 && reverse){
+                        SellPolo sell = new SellPolo();
+                        sell.setMarge(margeBidOne);
+                        sell.setMaxBidPriceTwo(maxBidPriceOneFirst);
+                        sell.setRialtoId(firstRialtoId);
+                        sell.setPair(firstCurrencyPairOne);
+                        sell.setRialto(firstRialto);
+                        sell.setContext(context);
+
+                        Thread tSeller = new Thread(sell, "seller");
+                        tSeller.start();
+                        try {
+                            synchronized (tSeller) {
+                                logger.info("Thread Sell wait!");
+                                tSeller.wait();
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        logger.info("Thread Sell waited!");
+                        reverse = false;
+                    }else {
+                        logger.info("Failure <Poloniex> Sell >= " + " margeBidOne: " + margeBidOne + " percentTwo: " + getPercentTwo() + " reversetwo: " + reverse);
+                    }
                 }
+
             }catch (IOException e) {
                 logger.error("Ошибка в запросе API Poloniex/Binance", e);
                 StringBuilder stringBuilder = new StringBuilder();

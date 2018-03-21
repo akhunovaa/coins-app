@@ -115,8 +115,8 @@ public class BuyPolo implements Runnable {
                     this.fail = Boolean.TRUE;
                     logger.info("Order fail: " + poloniexOrder.getOrderNumber() + " with the price " + buyPrice);
                     StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("<b>[ORDER FAIL]</b>").append("\n");
-                    stringBuilder.append("<b>ID: </b>").append(poloniexOrder.getOrderNumber()).append(" [").append(pair).append("] ").append("\n");
+                    stringBuilder.append("*[ORDER FAIL]*").append("\n");
+                    stringBuilder.append("*ID:*").append(poloniexOrder.getOrderNumber()).append(" [").append(pair).append("] ").append("\n");
                     context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
                     logger.info("Order fail: " + poloniexOrder.getOrderNumber() + " with the price " + buyPrice);
                     count = 0;
@@ -147,11 +147,11 @@ public class BuyPolo implements Runnable {
             if (!this.fail){
                 logger.info("BOUGHT! MARGE: " + marge + " PRICE: " + minAskPrice + "(" + buyPrice + ")" +" PAIR: " + pair + "CURRENCY_BUY: " + "LTC");
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("<b>[BUY]</b>").append("\n");
-                stringBuilder.append("<b>QTY: </b>").append(buyAmount).append(" [").append(pair).append("] ").append(" (").append(buyPrice).append(") ").append(" [").append(minAskPrice).append("] ").append("\n");
-                stringBuilder.append("<b>Diff: </b>").append(new DecimalFormat("#.#####").format(marge)).append("\n");
-                stringBuilder.append("<b>ID: </b>").append(poloniexOrder.getOrderNumber()).append("\n");
-                stringBuilder.append("<b>RESULT: </b>").append("\n").append(poloniexOrder.getResultingTrades()).append("\n");
+                stringBuilder.append("*[BUY]*").append("\n");
+                stringBuilder.append("*QTY: *").append(buyAmount).append(" [").append(pair).append("] ").append(" (").append(buyPrice).append(") ").append(" [").append(minAskPrice).append("] ").append("\n");
+                stringBuilder.append("*Diff:*").append(new DecimalFormat("#.#####").format(marge)).append("\n");
+                stringBuilder.append("*ID:*").append(poloniexOrder.getOrderNumber()).append("\n");
+                stringBuilder.append("*RESULT:*").append("\n").append(poloniexOrder.getResultingTrades()).append("\n");
                 context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
                 synchronized (this) {
                     this.notify();

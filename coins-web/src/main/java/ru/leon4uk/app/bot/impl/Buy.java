@@ -90,25 +90,25 @@ public class Buy implements Runnable {
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("<b>").append(dateFormat.format(date)).append("</b>").append("\n");
-            stringBuilder.append("<b>[FAILED BUY ORDER]</b>").append("\n");
-            stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
-            stringBuilder.append("<b>PAIR: </b>").append(bitsaneOrder.getPair()).append("\n");
-            stringBuilder.append("<b>PRICE: </b>").append(bitsaneOrder.getPrice()).append("\n");
-            stringBuilder.append("<b>executed_amount: </b>").append(bitsaneOrder.getExecutedAmount()).append("\n");
-            stringBuilder.append("<b>remaining_amount: </b>").append(bitsaneOrder.getRemainingAmount()).append("\n");
-            stringBuilder.append("<b>original_amount: </b>").append(bitsaneOrder.getOriginalAmount()).append("\n");
+            stringBuilder.append("*").append(dateFormat.format(date)).append("</b>").append("\n");
+            stringBuilder.append("*[FAILED BUY ORDER]*").append("\n");
+            stringBuilder.append("*ID:*").append(bitsaneOrder.getId()).append("\n");
+            stringBuilder.append("*PAIR:*").append(bitsaneOrder.getPair()).append("\n");
+            stringBuilder.append("*PRICE:*").append(bitsaneOrder.getPrice()).append("\n");
+            stringBuilder.append("*executed_amount:*").append(bitsaneOrder.getExecutedAmount()).append("\n");
+            stringBuilder.append("*remaining_amount:*").append(bitsaneOrder.getRemainingAmount()).append("\n");
+            stringBuilder.append("*original_amount:*").append(bitsaneOrder.getOriginalAmount()).append("\n");
             context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
         }else {
             logger.info("BOUGHT: MARGE-" + marge + " PRICE-" + minAskPriceTwo + " PAIR-" + pair + "CURRENCY_SELL-" + "XRP");
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("<b>[CREATE ORDER BUY]</b>").append("\n");
-            stringBuilder.append("<b>QTY: </b>").append(buyAmount).append(" [").append(pair).append("] ").append(" (").append(buyPrice).append(") ").append(" [").append(minAskPriceTwo).append("] ").append("\n");
-            stringBuilder.append("<b>Diff: </b>").append(new DecimalFormat("#.#####").format(marge)).append("\n");
+            stringBuilder.append("*[CREATE ORDER BUY]*").append("\n");
+            stringBuilder.append("*QTY:*").append(buyAmount).append(" [").append(pair).append("] ").append(" (").append(buyPrice).append(") ").append(" [").append(minAskPriceTwo).append("] ").append("\n");
+            stringBuilder.append("*Diff:*").append(new DecimalFormat("#.#####").format(marge)).append("\n");
             if (bitsaneOrder != null)
-                stringBuilder.append("<b>ID: </b>").append(bitsaneOrder.getId()).append("\n");
+                stringBuilder.append("*ID:*").append(bitsaneOrder.getId()).append("\n");
             else
-                stringBuilder.append("<b>ID: </b>").append(response).append("\n");
+                stringBuilder.append("*ID:*").append(response).append("\n");
            context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
            context.getBean(BitsaneBuyOrderBuffer.class).setStatus(Boolean.FALSE);
         }

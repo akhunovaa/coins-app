@@ -57,8 +57,9 @@ public class OrderHandler implements Runnable {
                 this.setFail(Boolean.FALSE);
                 logger.info("Order completed: " + orderNumber + " with the price " + price);
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("<b>[ORDER COMPLETED]</b>").append("\n");
-                stringBuilder.append("<b>ID: </b>").append(orderNumber).append(" [").append(pair).append("] ").append("\n");
+                stringBuilder.append("*[ORDER COMPLETED]*").append("\n");
+                stringBuilder.append("*ID:*").append(orderNumber).append(" [").append(pair).append("] ").append("\n");
+                stringBuilder.append("*PRICE:*").append(price).append(" [").append(pair).append("] ").append("\n");
                 context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
                 logger.info("End control of the order: " + orderNumber + " with the price " + price);
             }else {
@@ -71,9 +72,9 @@ public class OrderHandler implements Runnable {
                 this.setFail(Boolean.TRUE);
                 logger.info("Order fail: " + orderNumber + " with the price " + price);
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("<b>[ORDER FAIL]</b>").append("\n");
-                stringBuilder.append("<b>ID: </b>").append(orderNumber).append(" [").append(pair).append("] ").append("\n");
-                stringBuilder.append("<b>INFO: </b>").append(openOrdersList).append("\n");
+                stringBuilder.append("*[ORDER FAIL]*").append("\n");
+                stringBuilder.append("*ID:*").append(orderNumber).append(" [").append(pair).append("] ").append("\n");
+                stringBuilder.append("*INFO:*").append(openOrdersList).append("\n");
                 context.getBean(Rocket.class).sendMessage(stringBuilder.toString());
                 this.count = 0;
                 logger.info("End control of the FAILED order: " + orderNumber + " with the price " + price);
